@@ -8,11 +8,11 @@ class Response
     private $headers;
     private $body;
 
-    public function __construct(array $data)
+    public function __construct($httpCode, $headers, $body)
     {
-        $this->statusCode = $data[0];
-        $this->headers = $data[1];
-        $this->body = $data[2];
+        $this->statusCode = $httpCode;
+        $this->headers = $headers;
+        $this->body = $body;
     }
 
     /**

@@ -82,7 +82,7 @@ class HttpClient
                 }
             }
 
-            return [$httpCode, $responseHeaders, json_decode($body)];
+            return new Response($httpCode, $responseHeaders, json_decode($body, true));
         }
         throw new Unauthorized('Невозможно авторизоваться у Связного');
     }

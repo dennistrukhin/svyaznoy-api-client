@@ -15,16 +15,56 @@ use SvyaznoyApi\Request\Order as OrderRequest;
 class Client
 {
 
+    const URI_PROD_AUTH = 'https://auth.svyaznoy.ru';
+    const URI_PROD_API = 'https://api.svyaznoy.ru/v1';
+    const URI_PROD_DELIVERY = 'https://api.svyaznoy.ru/v1';
+
+    const URI_DEMO_AUTH = 'http://auth.sandbox.dev.svyaznoy.ru';
+    const URI_DEMO_API = 'http://api.sandbox.dev.svyaznoy.ru/v1';
+    const URI_DEMO_DELIVERY = 'http://demoad.8000.dev.svyaznoy.ru/v1';
+
     private $username;
     private $password;
     private $tokenStorage;
-    private $uriAuth = 'https://auth.svyaznoy.ru';
-    private $uriDelivery = 'http://py.svyaznoy.ru';
-    private $uriApi = 'https://api.svyaznoy.ru/v1';
+    private $uriAuth;
+    private $uriDelivery;
+    private $uriApi;
 
-    public function __construct($username, $password)
+    public static function getTest(ClientAuthentication $clientAuthentication)
+    {
+        $client = new self();
+        $client->setUsername($clientAuthentication->getUsername());
+        $client->setPassword($clientAuthentication->getPassword());
+        $client->setUriAuth(self::URI_DEMO_AUTH);
+        $client->setUriApi(self::URI_DEMO_API);
+        $client->setUriDelivery(self::URI_DEMO_DELIVERY);
+        return $client;
+    }
+
+    public static function getProd(ClientAuthentication $clientAuthentication)
+    {
+        $client = new self();
+        $client->setUsername($clientAuthentication->getUsername());
+        $client->setPassword($clientAuthentication->getPassword());
+        $client->setUriAuth(self::URI_PROD_AUTH);
+        $client->setUriApi(self::URI_PROD_API);
+        $client->setUriDelivery(self::URI_PROD_DELIVERY);
+        return $client;
+    }
+
+    /**
+     * @param mixed $username
+     */
+    public function setUsername($username)
     {
         $this->username = $username;
+    }
+
+    /**
+     * @param mixed $password
+     */
+    public function setPassword($password)
+    {
         $this->password = $password;
     }
 
