@@ -266,7 +266,7 @@ class OutpostPoint
     /**
      * @return bool
      */
-    public function isCredit(): bool
+    public function hasCredit(): bool
     {
         return $this->credit;
     }

@@ -3,8 +3,9 @@ namespace SvyaznoyApi\Request;
 
 use SvyaznoyApi\Authenticator;
 use SvyaznoyApi\Client;
+use SvyaznoyApi\Collection\CityCollection;
 use SvyaznoyApi\HttpClient;
-use SvyaznoyApi\Response;
+use SvyaznoyApi\Mapper\CityMapper;
 
 class Cities extends ARequest
 {
@@ -48,17 +49,28 @@ class Cities extends ARequest
         return $this;
     }
 
-    public function get()
+    public function get(?CitiesFilter $filter, ?Pagination $pagination)
     {
         $authenticator = new Authenticator($this->client);
         $httpClient = new HttpClient($authenticator);
-        $response = $httpClient->get(
-            $this->client->getUriApi() . '/cities',
-            [],
-            ['page' => $this->page, 'per_page' => $this->perPage]
-        );
-        return new Response($response);
+        $query = [
+            'page' => $pagination->getPageNumber(),
+            'per_page' => $pagination->getPageSize(),
+        ];
+        if (!is_null($filter->getAvailable())) {
+            $query['available'] = $filter->getAvailable() ? 1 : 0;
+        }
+        if (!empty($filter->getQuery())) {
+            $query['query'] = $filter->getQuery();
+        }
+        $response = $httpClient->get($this->client->getUriApi() . '/cities', [], $query);
+        $collection = new CityCollection();
+        $mapper = new CityMapper();
+        foreach ($response->getBody() as $item) {
+            $city = $mapper->map($item);
+            $collection->push($city);
+        }
+        return $collection;
     }
-
 
 }
