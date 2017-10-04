@@ -2,19 +2,12 @@
 namespace SvyaznoyApi\Request;
 
 use SvyaznoyApi\Authenticator;
-use SvyaznoyApi\Client;
 use SvyaznoyApi\Collection\OutpostPointCollection;
 use SvyaznoyApi\HttpClient;
 use SvyaznoyApi\Mapper\OutpostPointMapper;
 
 class OutpostPoints extends ARequest
 {
-
-    public function __construct(Client $client)
-    {
-        $this->client = $client;
-    }
-
 
     /**
      * @param OutpostPointsFilter|null $filter
