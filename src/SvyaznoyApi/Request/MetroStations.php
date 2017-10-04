@@ -1,52 +1,80 @@
 <?php
 namespace SvyaznoyApi\Request;
 
-use SvyaznoyApi\Authenticator;
-use SvyaznoyApi\Client;
+use SvyaznoyApi\Collection\MetroStationCollection;
 use SvyaznoyApi\HttpClient;
-use SvyaznoyApi\Response;
+use SvyaznoyApi\Mapper\MetroStationMapper;
 
 class MetroStations extends ARequest
 {
 
-    private $page = 1;
-    private $perPage = 10;
-
-    public function __construct(Client $client)
+    /**
+     * @param null|MetroStationsFilter $filter
+     * @param null|Pagination $pagination
+     * @return MetroStationCollection
+     */
+    public function get(?MetroStationsFilter $filter = null, ?Pagination $pagination = null)
     {
-        $this->client = $client;
+        if (is_null($pagination)) {
+            $pagination = new Pagination();
+        }
+        $query = [
+            'page' => $pagination->getPageNumber(),
+            'per_page' => $pagination->getPageSize(),
+        ];
+        $httpClient = new HttpClient($this->authenticator);
+        $response = $httpClient->get($this->baseUri . '/metro/stations', [], $query);
+        $collection = new MetroStationCollection();
+        $collection->setTotalCount($response->getHeader('X-Pagination-Total-Count'));
+        $mapper = new MetroStationMapper();
+        foreach ($response->getBody() as $item) {
+            $metroStation = $mapper->map($item);
+            $collection->push($metroStation);
+        }
+        return $collection;
     }
 
     /**
-     * @param int $page
-     * @return $this
+     * @param int $lineId
+     * @param null|Pagination $pagination
+     * @return MetroStationCollection
      */
-    public function page($page)
+    public function getForLine(int $lineId, ?Pagination $pagination = null)
     {
-        $this->page = $page;
-        return $this;
-    }
-
-    /**
-     * @param int $perPage
-     * @return $this
-     */
-    public function perPage($perPage)
-    {
-        $this->perPage = $perPage;
-        return $this;
-    }
-
-    public function get()
-    {
-        $authenticator = new Authenticator($this->client);
-        $httpClient = new HttpClient($authenticator);
+        if (is_null($pagination)) {
+            $pagination = new Pagination();
+        }
+        $query = [
+            'page' => $pagination->getPageNumber(),
+            'per_page' => $pagination->getPageSize(),
+        ];
+        $httpClient = new HttpClient($this->authenticator);
         $response = $httpClient->get(
-            $this->client->getUriApi() . '/metro/stations',
-            [],
-            ['page' => $this->page, 'per_page' => $this->perPage]
+            $this->baseUri . '/metro/lines/' . $lineId . '/stations', [], $query
         );
-        return new Response($response);
+        $collection = new MetroStationCollection();
+        $collection->setTotalCount($response->getHeader('X-Pagination-Total-Count'));
+        $mapper = new MetroStationMapper();
+        foreach ($response->getBody() as $item) {
+            $metroStation = $mapper->map($item);
+            $collection->push($metroStation);
+        }
+        return $collection;
+    }
+
+    /**
+     * @param int $stationId
+     * @return \SvyaznoyApi\Entity\MetroStation
+     */
+    public function getById(int $stationId)
+    {
+        $httpClient = new HttpClient($this->authenticator);
+        $response = $httpClient->get(
+            $this->baseUri . '/metro/stations/' . $stationId
+        );
+        $mapper = new MetroStationMapper();
+        $metroStation = $mapper->map($response->getBody());
+        return $metroStation;
     }
 
 

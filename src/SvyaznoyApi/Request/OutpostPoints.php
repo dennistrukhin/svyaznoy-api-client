@@ -1,7 +1,6 @@
 <?php
 namespace SvyaznoyApi\Request;
 
-use SvyaznoyApi\Authenticator;
 use SvyaznoyApi\Collection\OutpostPointCollection;
 use SvyaznoyApi\HttpClient;
 use SvyaznoyApi\Mapper\OutpostPointMapper;
@@ -16,19 +15,21 @@ class OutpostPoints extends ARequest
      */
     public function get(?OutpostPointsFilter $filter = null, ?Pagination $pagination = null)
     {
-        $authenticator = new Authenticator($this->client);
-        $httpClient = new HttpClient($authenticator);
+        if (is_numeric($pagination)) {
+            $pagination = new Pagination();
+        }
+        $httpClient = new HttpClient($this->authenticator);
         $query = [
             'page' => $pagination->getPageNumber(),
             'per_page' => $pagination->getPageSize(),
         ];
-        if ($filter->getActive() === true) {
+        if ($filter instanceof OutpostPointsFilter && $filter->getActive() === true) {
             $query['active'] = 1;
         }
-        if (count($filter->getIds())) {
+        if ($filter instanceof OutpostPointsFilter && count($filter->getIds())) {
             $query['ids'] = implode(',', $filter->getIds());
         }
-        $response = $httpClient->get($this->client->getUriApi() . '/shops', [], $query);
+        $response = $httpClient->get($this->baseUri . '/shops', [], $query);
         $collection = new OutpostPointCollection();
         $collection->setTotalCount($response->getHeader('X-Pagination-Total-Count'));
         $mapper = new OutpostPointMapper();

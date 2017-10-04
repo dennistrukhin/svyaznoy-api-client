@@ -1,7 +1,6 @@
 <?php
 namespace SvyaznoyApi\Request;
 
-use SvyaznoyApi\Authenticator;
 use SvyaznoyApi\Collection\MetroLineCollection;
 use SvyaznoyApi\HttpClient;
 use SvyaznoyApi\Mapper\MetroLineMapper;
@@ -14,18 +13,31 @@ class MetroLines extends ARequest
      */
     public function get()
     {
-        $authenticator = new Authenticator($this->client);
-        $httpClient = new HttpClient($authenticator);
-        $response = $httpClient->get(
-            $this->client->getUriApi() . '/metro/lines'
-        );
+        $httpClient = new HttpClient($this->authenticator);
+        $response = $httpClient->get($this->baseUri . '/metro/lines');
         $collection = new MetroLineCollection();
+        $collection->setTotalCount($response->getHeader('X-Pagination-Total-Count'));
         $mapper = new MetroLineMapper();
         foreach ($response->getBody() as $item) {
             $city = $mapper->map($item);
             $collection->push($city);
         }
         return $collection;
+    }
+
+    /**
+     * @param $metroLineId
+     * @return \SvyaznoyApi\Entity\MetroLine
+     */
+    public function getById($metroLineId)
+    {
+        $httpClient = new HttpClient($this->authenticator);
+        $response = $httpClient->get(
+            $this->baseUri . '/metro/lines/' . $metroLineId
+        );
+        $mapper = new MetroLineMapper();
+        $metroLine = $mapper->map($response->getBody());
+        return $metroLine;
     }
 
 

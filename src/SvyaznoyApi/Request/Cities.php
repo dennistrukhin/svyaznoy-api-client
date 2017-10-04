@@ -1,7 +1,6 @@
 <?php
 namespace SvyaznoyApi\Request;
 
-use SvyaznoyApi\Authenticator;
 use SvyaznoyApi\Collection\CityCollection;
 use SvyaznoyApi\HttpClient;
 use SvyaznoyApi\Mapper\CityMapper;
@@ -9,28 +8,52 @@ use SvyaznoyApi\Mapper\CityMapper;
 class Cities extends ARequest
 {
 
+    /**
+     * @param null|CitiesFilter $filter
+     * @param Pagination $pagination
+     * @return CityCollection
+     */
     public function get(?CitiesFilter $filter, ?Pagination $pagination)
     {
-        $authenticator = new Authenticator($this->client);
-        $httpClient = new HttpClient($authenticator);
+        if (is_numeric($pagination)) {
+            $pagination = new Pagination();
+        }
+        $httpClient = new HttpClient($this->authenticator);
         $query = [
             'page' => $pagination->getPageNumber(),
             'per_page' => $pagination->getPageSize(),
         ];
-        if (!is_null($filter->getAvailable())) {
+        if ($filter instanceof CitiesFilter && !is_null($filter->getAvailable())) {
             $query['available'] = $filter->getAvailable() ? 1 : 0;
         }
-        if (!empty($filter->getQuery())) {
+        if ($filter instanceof CitiesFilter && !empty($filter->getQuery())) {
             $query['query'] = $filter->getQuery();
         }
-        $response = $httpClient->get($this->client->getUriApi() . '/cities', [], $query);
+        $response = $httpClient->get($this->baseUri . '/cities', [], $query);
         $collection = new CityCollection();
+        $collection->setTotalCount($response->getHeader('X-Pagination-Total-Count'));
         $mapper = new CityMapper();
         foreach ($response->getBody() as $item) {
             $city = $mapper->map($item);
             $collection->push($city);
         }
         return $collection;
+    }
+
+
+    /**
+     * @param $cityId
+     * @return \SvyaznoyApi\Entity\City
+     */
+    public function getById($cityId)
+    {
+        $httpClient = new HttpClient($this->authenticator);
+        $response = $httpClient->get(
+            $this->baseUri . '/cities/' . $cityId
+        );
+        $mapper = new CityMapper();
+        $city = $mapper->map($response->getBody());
+        return $city;
     }
 
 }

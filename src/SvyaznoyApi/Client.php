@@ -2,13 +2,9 @@
 namespace SvyaznoyApi;
 
 use SvyaznoyApi\Request\Cities as CitiesRequest;
-use SvyaznoyApi\Request\City as CityRequest;
 use SvyaznoyApi\Request\OutpostPoints as OutpostPointsRequest;
 use SvyaznoyApi\Request\MetroStations as MetroStationsRequest;
-use SvyaznoyApi\Request\MetroStation as MetroStationRequest;
 use SvyaznoyApi\Request\MetroLines as MetroLinesRequest;
-use SvyaznoyApi\Request\MetroLine as MetroLineRequest;
-use SvyaznoyApi\Request\MetroLineStations as MetroLineStationsRequest;
 use SvyaznoyApi\Request\Delivery as DeliveryRequest;
 use SvyaznoyApi\Request\Order as OrderRequest;
 
@@ -29,6 +25,7 @@ class Client
     private $uriAuth;
     private $uriDelivery;
     private $uriApi;
+    private $authenticator;
 
     public static function getTest(ClientAuthentication $clientAuthentication)
     {
@@ -38,6 +35,7 @@ class Client
         $client->setUriAuth(self::URI_DEMO_AUTH);
         $client->setUriApi(self::URI_DEMO_API);
         $client->setUriDelivery(self::URI_DEMO_DELIVERY);
+        $client->setAuthenticator(new Authenticator($client));
         return $client;
     }
 
@@ -49,6 +47,7 @@ class Client
         $client->setUriAuth(self::URI_PROD_AUTH);
         $client->setUriApi(self::URI_PROD_API);
         $client->setUriDelivery(self::URI_PROD_DELIVERY);
+        $client->setAuthenticator(new Authenticator($client));
         return $client;
     }
 
@@ -145,52 +144,33 @@ class Client
         $this->uriDelivery = $uriDelivery;
     }
 
+    public function setAuthenticator(Authenticator $authenticator)
+    {
+        $this->authenticator = $authenticator;
+    }
+
     /**
      * Метод возвращает список городов
      * @return CitiesRequest
      */
     public function cities()
     {
-        return new CitiesRequest($this);
-    }
-
-    /**
-     * Метод возвращает информацию о городе
-     * @return CityRequest
-     */
-    public function city()
-    {
-        return new CityRequest($this);
+        return new CitiesRequest($this->getUriApi(), $this->authenticator);
     }
 
     public function outpostPoints()
     {
-        return new OutpostPointsRequest($this);
+        return new OutpostPointsRequest($this->getUriApi(), $this->authenticator);
     }
 
     public function metroStations()
     {
-        return new MetroStationsRequest($this);
-    }
-
-    public function metroStation()
-    {
-        return new MetroStationRequest($this);
+        return new MetroStationsRequest($this->getUriApi(), $this->authenticator);
     }
 
     public function metroLines()
     {
-        return new MetroLinesRequest($this);
-    }
-
-    public function metroLine()
-    {
-        return new MetroLineRequest($this);
-    }
-
-    public function metroLineStations()
-    {
-        return new MetroLineStationsRequest($this);
+        return new MetroLinesRequest($this->getUriApi(), $this->authenticator);
     }
 
     public function delivery()

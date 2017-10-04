@@ -2,18 +2,19 @@
 namespace SvyaznoyApi\Request;
 
 use SvyaznoyApi\Authenticator;
-use SvyaznoyApi\Client;
-use SvyaznoyApi\ITokenStorage;
 
 abstract class ARequest
 {
 
-    /** @var Client $client */
-    protected $client;
+    /** @var string $baseUri */
+    protected $baseUri = '';
+    /** @var Authenticator $authenticator */
+    protected $authenticator;
 
-    final public function __construct(Client $client)
+    final public function __construct(string $baseUri, Authenticator $authenticator)
     {
-        $this->client = $client;
+        $this->baseUri = $baseUri;
+        $this->authenticator = $authenticator;
     }
 
 }
