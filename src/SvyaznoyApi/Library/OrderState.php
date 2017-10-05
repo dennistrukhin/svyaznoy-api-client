@@ -1,5 +1,5 @@
 <?php
-namespace SvyaznoyApi\Entity;
+namespace SvyaznoyApi\Library;
 
 class OrderState
 {
@@ -12,7 +12,9 @@ class OrderState
     const STATE_CANCELLED = 'cancelled';
     const STATE_RETURNED_TO_STORAGE = 'returnedToStorage';
 
-    private static $typeStrings = [
+    const UNKNOWN_STATE_STRING = 'Неизвестное состояние заказа';
+
+    public static $typeStrings = [
         self::STATE_NEW => 'Заказ создан',
         self::STATE_REGISTERED => 'Заказ принят и поставлен в план на отправку в пункт выдачи',
         self::STATE_SENT_TO_SHOP => 'Заказ отправлен (находится в пути) в пункт выдачи',
@@ -27,7 +29,7 @@ class OrderState
         if (isset(self::$typeStrings[$type])) {
             return self::$typeStrings[$type];
         }
-        return 'Неизвестное состояние заказа';
+        return self::UNKNOWN_STATE_STRING;
     }
 
 }

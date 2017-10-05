@@ -1,5 +1,8 @@
 {
   "name": "zabberiteam/svyaznoy-api-client",
+  "require-dev": {
+    "phpunit/phpunit": "*"
+  },
   "autoload": {
     "psr-4": {
       "SvyaznoyApi\\": "src/SvyaznoyApi"

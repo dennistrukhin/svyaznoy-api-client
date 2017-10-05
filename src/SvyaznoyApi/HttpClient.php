@@ -65,6 +65,7 @@ class HttpClient
             $headerSize = curl_getinfo($ch, CURLINFO_HEADER_SIZE);
             $headerString = substr($serverOutput, 0, $headerSize);
             $body = substr($serverOutput, $headerSize);
+            echo $body;
             $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
             if ($httpCode == 401) {
                 $this->authenticator->refreshToken();

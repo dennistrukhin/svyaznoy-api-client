@@ -1,13 +1,16 @@
 <?php
 namespace SvyaznoyApi\Entity;
 
+use SvyaznoyApi\Library\Declension;
+
 class City
 {
 
     private $id = 0;
     private $name = '';
     private $alias = '';
-    private $declension = [];
+    /** @var Declension $declension */
+    private $declension;
     private $cityType = 0;
     private $deliveryTypes = [];
     private $paymentTypes = [];
@@ -30,7 +33,7 @@ class City
     /**
      * @param int $id
      */
-    public function setId(int $id)
+    public function setId(int $id): void
     {
         $this->id = $id;
     }
@@ -46,7 +49,7 @@ class City
     /**
      * @param string $name
      */
-    public function setName(string $name)
+    public function setName(string $name): void
     {
         $this->name = $name;
     }
@@ -62,23 +65,23 @@ class City
     /**
      * @param string $alias
      */
-    public function setAlias(string $alias)
+    public function setAlias(string $alias): void
     {
         $this->alias = $alias;
     }
 
     /**
-     * @return array
+     * @return Declension
      */
-    public function getDeclension(): array
+    public function getDeclension(): Declension
     {
         return $this->declension;
     }
 
     /**
-     * @param array $declension
+     * @param Declension $declension
      */
-    public function setDeclension(array $declension)
+    public function setDeclension(Declension $declension): void
     {
         $this->declension = $declension;
     }
@@ -94,7 +97,7 @@ class City
     /**
      * @param int $cityType
      */
-    public function setCityType(int $cityType)
+    public function setCityType(int $cityType): void
     {
         $this->cityType = $cityType;
     }
@@ -110,7 +113,7 @@ class City
     /**
      * @param array $deliveryTypes
      */
-    public function setDeliveryTypes(array $deliveryTypes)
+    public function setDeliveryTypes(array $deliveryTypes): void
     {
         $this->deliveryTypes = $deliveryTypes;
     }
@@ -126,7 +129,7 @@ class City
     /**
      * @param array $paymentTypes
      */
-    public function setPaymentTypes(array $paymentTypes)
+    public function setPaymentTypes(array $paymentTypes): void
     {
         $this->paymentTypes = $paymentTypes;
     }
@@ -142,7 +145,7 @@ class City
     /**
      * @param int $rulePriorityId
      */
-    public function setRulePriorityId(int $rulePriorityId)
+    public function setRulePriorityId(int $rulePriorityId): void
     {
         $this->rulePriorityId = $rulePriorityId;
     }
@@ -158,7 +161,7 @@ class City
     /**
      * @param int $regionId
      */
-    public function setRegionId(int $regionId)
+    public function setRegionId(int $regionId): void
     {
         $this->regionId = $regionId;
     }
@@ -174,7 +177,7 @@ class City
     /**
      * @param int $zoneId
      */
-    public function setZoneId(int $zoneId)
+    public function setZoneId(int $zoneId): void
     {
         $this->zoneId = $zoneId;
     }
@@ -190,7 +193,7 @@ class City
     /**
      * @param int $territoryId
      */
-    public function setTerritoryId(int $territoryId)
+    public function setTerritoryId(int $territoryId): void
     {
         $this->territoryId = $territoryId;
     }
@@ -206,7 +209,7 @@ class City
     /**
      * @param string $kladrCode
      */
-    public function setKladrCode(string $kladrCode)
+    public function setKladrCode(string $kladrCode): void
     {
         $this->kladrCode = $kladrCode;
     }
@@ -222,7 +225,7 @@ class City
     /**
      * @param string $timeOffset
      */
-    public function setTimeOffset(string $timeOffset)
+    public function setTimeOffset(string $timeOffset): void
     {
         $this->timeOffset = $timeOffset;
     }
@@ -238,7 +241,7 @@ class City
     /**
      * @param bool $metro
      */
-    public function setMetro(bool $metro)
+    public function setMetro(bool $metro): void
     {
         $this->metro = $metro;
     }

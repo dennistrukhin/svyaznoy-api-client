@@ -2,6 +2,7 @@
 namespace SvyaznoyApi\Mapper;
 
 use SvyaznoyApi\Entity\City;
+use SvyaznoyApi\Library\Declension;
 
 class CityMapper
 {
@@ -19,7 +20,12 @@ class CityMapper
             $city->setAlias($data['alias']);
         }
         if (isset($data['declension'])) {
-            $city->setDeclension($data['declension']);
+            $declension = new Declension(
+                $data['declension']['genitive'] ?? '',
+                $data['declension']['dative'] ?? '',
+                $data['declension']['prepositional'] ?? ''
+            );
+            $city->setDeclension($declension);
         }
         if (isset($data['city_type_id'])) {
             $city->setCityType($data['city_type_id']);

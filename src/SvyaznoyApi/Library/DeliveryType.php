@@ -1,12 +1,14 @@
 <?php
-namespace SvyaznoyApi\Entity;
+namespace SvyaznoyApi\Library;
 
 class DeliveryType
 {
 
     const TYPE_OUTPOST = 9;
 
-    private static $typeStrings = [
+    const UNKNOWN_TYPE_STRING = 'Неизвестный тип доставки';
+
+    public static $typeStrings = [
         self::TYPE_OUTPOST => 'Самовывоз: Продажа через торговую точку',
     ];
 
@@ -15,7 +17,7 @@ class DeliveryType
         if (isset(self::$typeStrings[$type])) {
             return self::$typeStrings[$type];
         }
-        return 'Неизвестный тип доставки';
+        return self::UNKNOWN_TYPE_STRING;
     }
 
 }

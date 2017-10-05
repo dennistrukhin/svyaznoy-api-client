@@ -11,7 +11,7 @@ abstract class ARequest
     /** @var Authenticator $authenticator */
     protected $authenticator;
 
-    final public function __construct(string $baseUri, Authenticator $authenticator)
+    public function __construct(string $baseUri, Authenticator $authenticator)
     {
         $this->baseUri = $baseUri;
         $this->authenticator = $authenticator;

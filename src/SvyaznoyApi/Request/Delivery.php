@@ -16,11 +16,6 @@ class Delivery extends ARequest
         'ot' => 26
     ];
 
-    public function __construct(Client $client)
-    {
-        $this->client = $client;
-    }
-
     public function inCity($cityId)
     {
         $this->params['lid'] = $cityId;
