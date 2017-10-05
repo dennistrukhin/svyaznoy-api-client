@@ -1,6 +1,8 @@
 <?php
 namespace SvyaznoyApi\Entity;
 
+use SvyaznoyApi\Library\OutpostWorkTime;
+
 class OutpostPoint
 {
 
@@ -11,11 +13,12 @@ class OutpostPoint
     private $active = false;
     private $address = '';
     private $stationIds = [];
-    private $yandxAddress = '';
-    private $workTime = [];
+    private $yandexAddress = '';
+    /** @var OutpostWorkTime $workTime */
+    private $workTime;
     private $workTimeCustom;
-    private $longitude = 0;
-    private $latitude = 0;
+    private $longitude = 0.;
+    private $latitude = 0.;
     private $email = '';
     private $directions = '';
     private $shopType = 0;
@@ -34,7 +37,7 @@ class OutpostPoint
     /**
      * @param string $id
      */
-    public function setId(string $id)
+    public function setId(string $id): void
     {
         $this->id = $id;
     }
@@ -50,7 +53,7 @@ class OutpostPoint
     /**
      * @param string $name
      */
-    public function setName(string $name)
+    public function setName(string $name): void
     {
         $this->name = $name;
     }
@@ -66,7 +69,7 @@ class OutpostPoint
     /**
      * @param array $images
      */
-    public function setImages(array $images)
+    public function setImages(array $images): void
     {
         $this->images = $images;
     }
@@ -82,7 +85,7 @@ class OutpostPoint
     /**
      * @param int $cityId
      */
-    public function setCityId(int $cityId)
+    public function setCityId(int $cityId): void
     {
         $this->cityId = $cityId;
     }
@@ -98,7 +101,7 @@ class OutpostPoint
     /**
      * @param bool $active
      */
-    public function setActive(bool $active)
+    public function setActive(bool $active): void
     {
         $this->active = $active;
     }
@@ -114,7 +117,7 @@ class OutpostPoint
     /**
      * @param string $address
      */
-    public function setAddress(string $address)
+    public function setAddress(string $address): void
     {
         $this->address = $address;
     }
@@ -130,7 +133,7 @@ class OutpostPoint
     /**
      * @param array $stationIds
      */
-    public function setStationIds(array $stationIds)
+    public function setStationIds(array $stationIds): void
     {
         $this->stationIds = $stationIds;
     }
@@ -138,31 +141,31 @@ class OutpostPoint
     /**
      * @return string
      */
-    public function getYandxAddress(): string
+    public function getYandexAddress(): string
     {
-        return $this->yandxAddress;
+        return $this->yandexAddress;
     }
 
     /**
-     * @param string $yandxAddress
+     * @param string $yandexAddress
      */
-    public function setYandxAddress(string $yandxAddress)
+    public function setYandexAddress(string $yandexAddress): void
     {
-        $this->yandxAddress = $yandxAddress;
+        $this->yandexAddress = $yandexAddress;
     }
 
     /**
-     * @return array
+     * @return OutpostWorkTime
      */
-    public function getWorkTime(): array
+    public function getWorkTime(): OutpostWorkTime
     {
         return $this->workTime;
     }
 
     /**
-     * @param array $workTime
+     * @param OutpostWorkTime $workTime
      */
-    public function setWorkTime(array $workTime)
+    public function setWorkTime(OutpostWorkTime $workTime): void
     {
         $this->workTime = $workTime;
     }
@@ -178,39 +181,39 @@ class OutpostPoint
     /**
      * @param mixed $workTimeCustom
      */
-    public function setWorkTimeCustom($workTimeCustom)
+    public function setWorkTimeCustom($workTimeCustom): void
     {
         $this->workTimeCustom = $workTimeCustom;
     }
 
     /**
-     * @return int
+     * @return float
      */
-    public function getLongitude(): int
+    public function getLongitude(): float
     {
         return $this->longitude;
     }
 
     /**
-     * @param int $longitude
+     * @param float $longitude
      */
-    public function setLongitude(int $longitude)
+    public function setLongitude(float $longitude): void
     {
         $this->longitude = $longitude;
     }
 
     /**
-     * @return int
+     * @return float
      */
-    public function getLatitude(): int
+    public function getLatitude(): float
     {
         return $this->latitude;
     }
 
     /**
-     * @param int $latitude
+     * @param float $latitude
      */
-    public function setLatitude(int $latitude)
+    public function setLatitude(float $latitude): void
     {
         $this->latitude = $latitude;
     }
@@ -226,7 +229,7 @@ class OutpostPoint
     /**
      * @param string $email
      */
-    public function setEmail(string $email)
+    public function setEmail(string $email): void
     {
         $this->email = $email;
     }
@@ -242,7 +245,7 @@ class OutpostPoint
     /**
      * @param string $directions
      */
-    public function setDirections(string $directions)
+    public function setDirections(string $directions): void
     {
         $this->directions = $directions;
     }
@@ -258,7 +261,7 @@ class OutpostPoint
     /**
      * @param int $shopType
      */
-    public function setShopType(int $shopType)
+    public function setShopType(int $shopType): void
     {
         $this->shopType = $shopType;
     }
@@ -274,7 +277,7 @@ class OutpostPoint
     /**
      * @param bool $credit
      */
-    public function setCredit(bool $credit)
+    public function setCredit(bool $credit): void
     {
         $this->credit = $credit;
     }
@@ -290,7 +293,7 @@ class OutpostPoint
     /**
      * @param array $services
      */
-    public function setServices(array $services)
+    public function setServices(array $services): void
     {
         $this->services = $services;
     }
@@ -306,7 +309,7 @@ class OutpostPoint
     /**
      * @param bool $twentyFourHour
      */
-    public function setTwentyFourHour(bool $twentyFourHour)
+    public function setTwentyFourHour(bool $twentyFourHour): void
     {
         $this->twentyFourHour = $twentyFourHour;
     }

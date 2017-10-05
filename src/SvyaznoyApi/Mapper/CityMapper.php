@@ -28,13 +28,13 @@ class CityMapper
             $city->setDeclension($declension);
         }
         if (isset($data['city_type_id'])) {
-            $city->setCityType($data['city_type_id']);
+            $city->setCityTypeId($data['city_type_id']);
         }
         if (isset($data['delivery_type_ids'])) {
-            $city->setDeliveryTypes($data['delivery_type_ids']);
+            $city->setDeliveryTypeIds($data['delivery_type_ids']);
         }
         if (isset($data['payment_type_ids'])) {
-            $city->setPaymentTypes($data['payment_type_ids']);
+            $city->setPaymentTypeIds($data['payment_type_ids']);
         }
         if (isset($data['rule_priority_id'])) {
             $city->setRulePriorityId($data['rule_priority_id']);

@@ -15,7 +15,7 @@ class OutpostPoints extends ARequest
      */
     public function get(?OutpostPointsFilter $filter = null, ?Pagination $pagination = null)
     {
-        if (is_numeric($pagination)) {
+        if (is_null($pagination)) {
             $pagination = new Pagination();
         }
         $httpClient = new HttpClient($this->authenticator);

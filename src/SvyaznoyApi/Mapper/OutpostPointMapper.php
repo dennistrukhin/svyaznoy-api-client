@@ -2,6 +2,9 @@
 namespace SvyaznoyApi\Mapper;
 
 use SvyaznoyApi\Entity\OutpostPoint;
+use SvyaznoyApi\Library\OutpostWorkTime;
+use SvyaznoyApi\Library\Time;
+use SvyaznoyApi\Library\TimeInterval;
 
 class OutpostPointMapper
 {
@@ -31,10 +34,21 @@ class OutpostPointMapper
             $outpostPoint->setStationIds($data['station_ids']);
         }
         if (isset($data['yandex_address'])) {
-            $outpostPoint->setYandxAddress($data['yandex_address']);
+            $outpostPoint->setYandexAddress($data['yandex_address']);
         }
         if (isset($data['work_time'])) {
-            $outpostPoint->setWorkTime($data['work_time']);
+            $wt = new OutpostWorkTime();
+            if (isset($data['work_time']['string'])) {
+                $wt->setString($data['work_time']['string']);
+            }
+            for ($i = 1; $i <= 7; $i++) {
+                if (!empty($data['work_time']['array'][$i])) {
+                    $timeFrom = Time::makeFromString($data['work_time']['array'][$i]['time_from']);
+                    $timeTo   = Time::makeFromString($data['work_time']['array'][$i]['time_to']);
+                    $wt->setDay($i, new TimeInterval($timeFrom, $timeTo));
+                }
+            }
+            $outpostPoint->setWorkTime($wt);
         }
         if (isset($data['work_time_custom'])) {
             $outpostPoint->setWorkTimeCustom($data['work_time_custom']);

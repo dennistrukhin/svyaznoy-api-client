@@ -32,6 +32,16 @@ HERE;
             $city->getDeclension()->getPrepositional() === (string)$data['declension']['prepositional'],
             'expected ' . (string)$data['declension']['prepositional'] . ' and got ' . $city->getDeclension()->getPrepositional()
         );
+        $this->assertTrue($city->getCityTypeId() === $data['city_type_id']);
+        $this->assertTrue($city->getDeliveryTypeIds() === $data['delivery_type_ids']);
+        $this->assertTrue($city->getPaymentTypeIds() === $data['payment_type_ids']);
+        $this->assertTrue($city->getRulePriorityId() === $data['rule_priority_id']);
+        $this->assertTrue($city->getZoneId() === $data['zone_id']);
+        $this->assertTrue($city->getTerritoryId() === $data['territory_id']);
+        $this->assertTrue($city->getRegionId() === $data['region_id']);
+        $this->assertTrue($city->getKladrCode() === $data['kladr_code']);
+        $this->assertTrue($city->getTimeOffset() === $data['time_offset']);
+        $this->assertTrue($city->hasMetro() === ($data['has_metro'] == 1));
     }
 
 }

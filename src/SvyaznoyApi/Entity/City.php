@@ -11,9 +11,9 @@ class City
     private $alias = '';
     /** @var Declension $declension */
     private $declension;
-    private $cityType = 0;
-    private $deliveryTypes = [];
-    private $paymentTypes = [];
+    private $cityTypeId = 0;
+    private $deliveryTypeIds = [];
+    private $paymentTypeIds = [];
     private $rulePriorityId = 0;
     private $regionId = 0;
     private $zoneId = 0;
@@ -89,49 +89,49 @@ class City
     /**
      * @return int
      */
-    public function getCityType(): int
+    public function getCityTypeId(): int
     {
-        return $this->cityType;
+        return $this->cityTypeId;
     }
 
     /**
-     * @param int $cityType
+     * @param int $cityTypeId
      */
-    public function setCityType(int $cityType): void
+    public function setCityTypeId(int $cityTypeId): void
     {
-        $this->cityType = $cityType;
-    }
-
-    /**
-     * @return array
-     */
-    public function getDeliveryTypes(): array
-    {
-        return $this->deliveryTypes;
-    }
-
-    /**
-     * @param array $deliveryTypes
-     */
-    public function setDeliveryTypes(array $deliveryTypes): void
-    {
-        $this->deliveryTypes = $deliveryTypes;
+        $this->cityTypeId = $cityTypeId;
     }
 
     /**
      * @return array
      */
-    public function getPaymentTypes(): array
+    public function getDeliveryTypeIds(): array
     {
-        return $this->paymentTypes;
+        return $this->deliveryTypeIds;
     }
 
     /**
-     * @param array $paymentTypes
+     * @param array $deliveryTypeIds
      */
-    public function setPaymentTypes(array $paymentTypes): void
+    public function setDeliveryTypeIds(array $deliveryTypeIds): void
     {
-        $this->paymentTypes = $paymentTypes;
+        $this->deliveryTypeIds = $deliveryTypeIds;
+    }
+
+    /**
+     * @return array
+     */
+    public function getPaymentTypeIds(): array
+    {
+        return $this->paymentTypeIds;
+    }
+
+    /**
+     * @param array $paymentTypeIds
+     */
+    public function setPaymentTypeIds(array $paymentTypeIds): void
+    {
+        $this->paymentTypeIds = $paymentTypeIds;
     }
 
     /**
