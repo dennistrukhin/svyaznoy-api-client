@@ -1,7 +1,7 @@
 <?php
 namespace SvyaznoyApi;
 
-class ClientAuthentication
+class ClientAuthenticationData
 {
 
     private $username;

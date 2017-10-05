@@ -25,9 +25,8 @@ class Client
     private $uriAuth;
     private $uriDelivery;
     private $uriApi;
-    private $authenticator;
 
-    public static function getTest(ClientAuthentication $clientAuthentication)
+    public static function getTest(ClientAuthenticationData $clientAuthentication)
     {
         $client = new self();
         $client->setUsername($clientAuthentication->getUsername());
@@ -35,11 +34,10 @@ class Client
         $client->setUriAuth(self::URI_DEMO_AUTH);
         $client->setUriApi(self::URI_DEMO_API);
         $client->setUriDelivery(self::URI_DEMO_DELIVERY);
-        $client->setAuthenticator(new Authenticator($client));
         return $client;
     }
 
-    public static function getProd(ClientAuthentication $clientAuthentication)
+    public static function getProd(ClientAuthenticationData $clientAuthentication)
     {
         $client = new self();
         $client->setUsername($clientAuthentication->getUsername());
@@ -47,7 +45,6 @@ class Client
         $client->setUriAuth(self::URI_PROD_AUTH);
         $client->setUriApi(self::URI_PROD_API);
         $client->setUriDelivery(self::URI_PROD_DELIVERY);
-        $client->setAuthenticator(new Authenticator($client));
         return $client;
     }
 
@@ -144,38 +141,33 @@ class Client
         $this->uriDelivery = $uriDelivery;
     }
 
-    public function setAuthenticator(Authenticator $authenticator)
-    {
-        $this->authenticator = $authenticator;
-    }
-
     /**
      * Метод возвращает список городов
      * @return CitiesRequest
      */
     public function cities()
     {
-        return new CitiesRequest($this->getUriApi(), $this->authenticator);
+        return new CitiesRequest($this->getUriApi(), new Authenticator($this));
     }
 
     public function outpostPoints()
     {
-        return new OutpostPointsRequest($this->getUriApi(), $this->authenticator);
+        return new OutpostPointsRequest($this->getUriApi(), new Authenticator($this));
     }
 
     public function metroStations()
     {
-        return new MetroStationsRequest($this->getUriApi(), $this->authenticator);
+        return new MetroStationsRequest($this->getUriApi(), new Authenticator($this));
     }
 
     public function metroLines()
     {
-        return new MetroLinesRequest($this->getUriApi(), $this->authenticator);
+        return new MetroLinesRequest($this->getUriApi(), new Authenticator($this));
     }
 
     public function delivery()
     {
-        return new DeliveryRequest($this);
+        return new DeliveryRequest($this->getUriDelivery(), new Authenticator($this));
     }
 
     public function order()
