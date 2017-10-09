@@ -119,7 +119,7 @@ class Client
 
     public function order()
     {
-        return new OrderRequest($this->uriDelivery, new Authenticator($this));
+        return new OrderRequest($this->uriApi, new Authenticator($this));
     }
 
 }

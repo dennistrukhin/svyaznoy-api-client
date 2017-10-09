@@ -27,7 +27,7 @@ class Client
         return $this->send(self::METHOD_GET, $uri, $headers, $params);
     }
 
-    public function post($uri, $headers = [], $params = [])
+    public function post($uri, ?Headers $headers = null, $params = [])
     {
         return $this->send(self::METHOD_POST, $uri, $headers, $params);
     }
@@ -47,6 +47,9 @@ class Client
             if ($response->getStatusCode() == 401) {
                 $this->authenticator->refreshToken();
                 continue;
+            }
+            if (in_array($response->getStatusCode(), [200, 201, 204, 422])) {
+                break;
             }
         }
         if (!isset($response) || !$response instanceof Response) {

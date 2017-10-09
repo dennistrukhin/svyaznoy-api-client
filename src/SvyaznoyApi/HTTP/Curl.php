@@ -55,7 +55,9 @@ class Curl
             curl_setopt($this->ch, CURLOPT_HTTPHEADER, $headersToSend);
         }
         curl_setopt($this->ch, CURLOPT_URL, $this->url);
-        return new Response(curl_exec($this->ch));
+        $responseString = curl_exec($this->ch);
+//        var_dump(curl_getinfo($this->ch));
+        return new Response($responseString);
     }
 
 }
