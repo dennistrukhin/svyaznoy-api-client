@@ -1,126 +1,98 @@
 <?php
 namespace SvyaznoyApi\Request;
 
-use SvyaznoyApi\Authenticator;
-use SvyaznoyApi\Client;
-use SvyaznoyApi\HttpClient;
-use SvyaznoyApi\Response;
+use SvyaznoyApi\Exception\UnprocessableEntity;
+use SvyaznoyApi\HTTP\Client;
+use SvyaznoyApi\Library\DeliveryDate;
+use SvyaznoyApi\Library\TimeInterval;
 
 class Order extends ARequest
 {
 
-    private $params = [
-        'delivery_time_from' => '08:00',
-        'delivery_time_to' => '23:00',
-        'format' => 'json',
-        'basket' => []
-    ];
-
-    public function __construct(Client $client)
+    public function create(\SvyaznoyApi\Entity\Order $order)
     {
-        $this->client = $client;
+        $httpClient = new Client($this->authenticator);
+
+        $response = $httpClient->post(
+            $this->baseUri . '/orders',
+            null,
+            $this->getQueryArray($order)
+        );
+        if ($response->getStatusCode() === 422) {
+            $messages = [];
+            foreach ($response->getBody() as $errInfo) {
+                $messages[] = $errInfo['message'];
+            }
+            $e = new UnprocessableEntity($response->getStatusText(), $messages);
+            throw $e;
+        }
+        return $response;
     }
 
     /**
-     * @param $id
-     * @return $this
-     * @internal param mixed $query
+     * @param \SvyaznoyApi\Entity\Order $order
+     * @return array
      */
-    public function setOrderId($id)
+    private function getQueryArray(\SvyaznoyApi\Entity\Order $order): array
     {
-        $this->params['partner_order_number'] = $id;
-        return $this;
-    }
-
-    public function setCityId($cityId)
-    {
-        $this->params['city_id'] = $cityId;
-        return $this;
-    }
-
-    public function setDeliveryId($deliveryId)
-    {
-        $this->params['delivery_type_id'] = $deliveryId;
-        return $this;
-    }
-
-    public function setPaymentId($paymentId)
-    {
-        $this->params['payment_type_id'] = $paymentId;
-        return $this;
-    }
-
-    public function setDeliveryDate($deliveryDate)
-    {
-        $this->params['payment_type_id'] = $deliveryDate;
-        return $this;
-    }
-
-    public function setCustomerName($customerName)
-    {
-        $this->params['contact_name'] = $customerName;
-        return $this;
-    }
-
-    public function setCustomerMobilePhone($mobilePhone)
-    {
-        $this->params['mobile_phone'] = $mobilePhone;
-        return $this;
-    }
-
-    public function setCustomerLandPhone($landPhone)
-    {
-        $this->params['city_phone'] = $landPhone;
-        return $this;
-    }
-
-    public function setCustomerEmail($email)
-    {
-        $this->params['email'] = $email;
-        return $this;
-    }
-
-    public function setOutpostId($outpostId)
-    {
-        $this->params['cms_addressee'] = $outpostId;
-        return $this;
-    }
-
-    public function setShipmentDateTime(\DateTime $shipmentDateTime)
-    {
-        $this->params['calculation_datetime'] = $shipmentDateTime->format('Y-m-d\TH:i:s');
-        return $this;
-    }
-
-    public function setCompanyInn($number)
-    {
-        $this->params['bn_inn'] = $number;
-        return $this;
-    }
-
-    public function setCompanyName($companyName)
-    {
-        $this->params['f_company_name'] = $companyName;
-        return $this;
-    }
-
-    public function addProduct($price, $quantity)
-    {
-        $this->params['basket'][] = [
-            'product_id' => '2796047',
-            'price' => round($price / 100, 2),
-            'qty' => $quantity
-        ];
-    }
-
-    public function create()
-    {
-        $authenticator = new Authenticator($this->client);
-        $httpClient = new HttpClient($authenticator);
-        $response = $httpClient->post(
-            $this->client->getUriApi() . '/orders'
-        );
-        return new Response($response);
+        $query = [];
+        if (!empty($order->getPartnerOrderNumber())) {
+            $query['partner_order_number'] = $order->getPartnerOrderNumber();
+        }
+        if (!empty($order->getCityId())) {
+            $query['city_id'] = $order->getCityId();
+        }
+        if (!empty($order->getDeliveryTypeId())) {
+            $query['delivery_type_id'] = $order->getDeliveryTypeId();
+        }
+        if (!empty($order->getPaymentTypeId())) {
+            $query['payment_type_id'] = $order->getPaymentTypeId();
+        }
+        if ($order->getDeliveryDate() instanceof DeliveryDate) {
+            $query['delivery_date'] = $order->getDeliveryDate()->format('Y-m-d');
+        }
+        if ($order->getDeliveryInterval() instanceof TimeInterval) {
+            $query['delivery_time_from'] = $order->getDeliveryInterval()->getTimeFrom()->format('H:i');
+            $query['delivery_time_to'] = $order->getDeliveryInterval()->getTimeTo()->format('H:i');
+        }
+        if (!empty($order->getContactName())) {
+            $query['contact_name'] = $order->getContactName();
+        }
+        if (!empty($order->getMobilePhone())) {
+            $query['mobile_phone'] = $order->getMobilePhone()->getNumber();
+        }
+        if (!empty($order->getCityPhone())) {
+            $query['city_phone'] = $order->getCityPhone()->getNumber();
+        }
+        if (!empty($order->getEmail())) {
+            $query['email'] = $order->getEmail();
+        }
+        if (!empty($order->getOutpostPointId())) {
+            $query['cms_addressee'] = $order->getOutpostPointId();
+        }
+        if ($order->getCalculationDateTime() instanceof \DateTime) {
+            $query['calculation_datetime'] = $order->getCalculationDateTime()->getTimestamp();
+        }
+        if (!empty($order->getCompanyName())) {
+            $query['f_company_name'] = $order->getCompanyName();
+        }
+        if (!empty($order->getCompanyInn())) {
+            $query['bn_inn'] = $order->getCompanyInn();
+        }
+        $query['format'] = 'json';
+        $cartItems = $order->getCart()->getItems();
+        if (count($cartItems) > 0) {
+            $cartArray = [];
+            foreach ($cartItems as $cartItem) {
+                $cartArray[] = [
+                    'product_id' => $cartItem->getProductId(),
+                    'price' => $cartItem->getPrice(),
+                    'qty' => $cartItem->getQuantity(),
+                ];
+            }
+            $query['basket'] = $cartArray;
+        }
+        return $query;
     }
 
 
