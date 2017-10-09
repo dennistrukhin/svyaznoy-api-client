@@ -3,6 +3,8 @@ namespace SvyaznoyApi\HTTP;
 
 use SvyaznoyApi\Authenticator;
 use SvyaznoyApi\Exception\Unauthorized;
+use SvyaznoyApi\Exception\Unreachable;
+use SvyaznoyApi\Exception\Unrecoverable;
 
 class Client
 {
@@ -46,9 +48,17 @@ class Client
                 $this->authenticator->refreshToken();
                 continue;
             }
-            return $response;
         }
-        throw new Unauthorized('Невозможно авторизоваться у Связного');
+        if (!isset($response) || !$response instanceof Response) {
+            throw new Unreachable('Невозможно получить ответ от удалённого сервиса.');
+        }
+        switch ($response->getStatusCode()) {
+            case 401:
+                throw new Unauthorized('Невозможно авторизоваться у Связного');
+            case 500:
+                throw new Unrecoverable('Удалённый сервис вернул критическую ошибку');
+        }
+        return $response;
     }
 
 }

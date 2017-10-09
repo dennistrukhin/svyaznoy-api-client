@@ -1,31 +1,35 @@
 <?php
 namespace SvyaznoyApi\Request;
 
-use SvyaznoyApi\Authenticator;
-use SvyaznoyApi\Client;
-use SvyaznoyApi\Client;
-use SvyaznoyApi\Response;
+use SvyaznoyApi\Collection\DeliveryCollection;
+use SvyaznoyApi\HTTP\Client;
+use SvyaznoyApi\Mapper\DeliveryMapper;
 
 class Delivery extends ARequest
 {
 
-    private $params = [
-        'owner' => 'site',
-        'did' => [9],
-        'pid' => [2796047 => ''],
-        'ot' => 26
-    ];
-
-    public function get()
+    public function get(DeliveryFilter $filter)
     {
-        $authenticator = new Authenticator($this->client);
-        $httpClient = new Client($authenticator);
-        $response = $httpClient->get(
-            $this->client->getUriDelivery() . '/apps/delivery/calc/',
-            [],
-            $this->params
-        );
-        return new Response($response);
+        $httpClient = new Client($this->authenticator);
+        $query = [
+            'delivery_type_ids' => 9,
+            'city_id' => $filter->getCityId(),
+            'order_type_id' => 26,
+            'products' => [
+                [
+                    'id' => 2796047,
+                    'qty' => 1,
+                ],
+            ],
+        ];
+        $response = $httpClient->get($this->baseUri . '/variations_orders', null, $query);
+        $collection = new DeliveryCollection();
+        $mapper = new DeliveryMapper();
+        foreach ($response->getBody()['items'] as $item) {
+            $city = $mapper->map($item);
+            $collection->push($city);
+        }
+        return $collection;
     }
 
 

@@ -18,6 +18,7 @@ class Delivery
     /** @var BasketSumRange $basketSumRange */
     private $basketSumRange;
     private $outpostPointId = '';
+    /** @var \DateTime $datetime */
     private $datetime;
 
     /**
@@ -165,17 +166,17 @@ class Delivery
     }
 
     /**
-     * @return mixed
+     * @return \DateTime
      */
-    public function getDatetime()
+    public function getDatetime(): \DateTime
     {
         return $this->datetime;
     }
 
     /**
-     * @param mixed $datetime
+     * @param \DateTime $datetime
      */
-    public function setDatetime($datetime)
+    public function setDatetime(\DateTime $datetime)
     {
         $this->datetime = $datetime;
     }
