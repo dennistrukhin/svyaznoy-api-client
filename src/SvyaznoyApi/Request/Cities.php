@@ -2,7 +2,7 @@
 namespace SvyaznoyApi\Request;
 
 use SvyaznoyApi\Collection\CityCollection;
-use SvyaznoyApi\HttpClient;
+use SvyaznoyApi\Client;
 use SvyaznoyApi\Mapper\CityMapper;
 
 class Cities extends ARequest
@@ -18,7 +18,7 @@ class Cities extends ARequest
         if (is_numeric($pagination)) {
             $pagination = new Pagination();
         }
-        $httpClient = new HttpClient($this->authenticator);
+        $httpClient = new Client($this->authenticator);
         $query = [
             'page' => $pagination->getPageNumber(),
             'per_page' => $pagination->getPageSize(),
@@ -47,7 +47,7 @@ class Cities extends ARequest
      */
     public function getById($cityId)
     {
-        $httpClient = new HttpClient($this->authenticator);
+        $httpClient = new Client($this->authenticator);
         $response = $httpClient->get(
             $this->baseUri . '/cities/' . $cityId
         );

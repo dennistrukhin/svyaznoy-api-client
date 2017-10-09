@@ -3,7 +3,7 @@ namespace SvyaznoyApi\Request;
 
 use SvyaznoyApi\Authenticator;
 use SvyaznoyApi\Client;
-use SvyaznoyApi\HttpClient;
+use SvyaznoyApi\Client;
 use SvyaznoyApi\Response;
 
 class Delivery extends ARequest
@@ -16,34 +16,10 @@ class Delivery extends ARequest
         'ot' => 26
     ];
 
-    public function inCity($cityId)
-    {
-        $this->params['lid'] = $cityId;
-        return $this;
-    }
-
-    public function forPayment($paymentId)
-    {
-        $this->params['payment_type'] = $paymentId;
-        return $this;
-    }
-
-    public function shippedOn(\DateTime $dateTime)
-    {
-        $this->params['cd'] = $dateTime->getTimestamp();
-        return $this;
-    }
-
-    public function toOutpostPoint($outpostPointId)
-    {
-        $this->params['tp'] = $outpostPointId;
-        return $this;
-    }
-
     public function get()
     {
         $authenticator = new Authenticator($this->client);
-        $httpClient = new HttpClient($authenticator);
+        $httpClient = new Client($authenticator);
         $response = $httpClient->get(
             $this->client->getUriDelivery() . '/apps/delivery/calc/',
             [],

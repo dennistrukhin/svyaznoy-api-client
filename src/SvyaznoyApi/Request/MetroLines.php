@@ -2,7 +2,7 @@
 namespace SvyaznoyApi\Request;
 
 use SvyaznoyApi\Collection\MetroLineCollection;
-use SvyaznoyApi\HttpClient;
+use SvyaznoyApi\Client;
 use SvyaznoyApi\Mapper\MetroLineMapper;
 
 class MetroLines extends ARequest
@@ -13,7 +13,7 @@ class MetroLines extends ARequest
      */
     public function get()
     {
-        $httpClient = new HttpClient($this->authenticator);
+        $httpClient = new Client($this->authenticator);
         $response = $httpClient->get($this->baseUri . '/metro/lines');
         $collection = new MetroLineCollection();
         $collection->setTotalCount($response->getHeader('X-Pagination-Total-Count'));
@@ -31,7 +31,7 @@ class MetroLines extends ARequest
      */
     public function getById($metroLineId)
     {
-        $httpClient = new HttpClient($this->authenticator);
+        $httpClient = new Client($this->authenticator);
         $response = $httpClient->get(
             $this->baseUri . '/metro/lines/' . $metroLineId
         );

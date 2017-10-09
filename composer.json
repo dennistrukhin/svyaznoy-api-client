@@ -1,7 +1,8 @@
 {
-  "name": "zabberiteam/svyaznoy-api-client",
+  "name": "dennistrukhin/svyaznoy-api-client",
   "require-dev": {
-    "phpunit/phpunit": "*"
+    "phpunit/phpunit": "*",
+    "phpmetrics/phpmetrics": "*"
   },
   "autoload": {
     "psr-4": {

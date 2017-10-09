@@ -19,65 +19,36 @@ class Client
     const URI_DEMO_API = 'http://api.sandbox.dev.svyaznoy.ru/v1';
     const URI_DEMO_DELIVERY = 'http://demoad.8000.dev.svyaznoy.ru/v1';
 
-    private $username;
-    private $password;
+    /** @var ClientConfiguration $configuration */
+    private $configuration;
     private $tokenStorage;
     private $uriAuth;
     private $uriDelivery;
     private $uriApi;
 
-    public static function getTest(ClientAuthenticationData $clientAuthentication)
+    public function __construct($clientConfiguration)
     {
-        $client = new self();
-        $client->setUsername($clientAuthentication->getUsername());
-        $client->setPassword($clientAuthentication->getPassword());
-        $client->setUriAuth(self::URI_DEMO_AUTH);
-        $client->setUriApi(self::URI_DEMO_API);
-        $client->setUriDelivery(self::URI_DEMO_DELIVERY);
-        return $client;
-    }
-
-    public static function getProd(ClientAuthenticationData $clientAuthentication)
-    {
-        $client = new self();
-        $client->setUsername($clientAuthentication->getUsername());
-        $client->setPassword($clientAuthentication->getPassword());
-        $client->setUriAuth(self::URI_PROD_AUTH);
-        $client->setUriApi(self::URI_PROD_API);
-        $client->setUriDelivery(self::URI_PROD_DELIVERY);
-        return $client;
+        $this->configuration = $clientConfiguration;
+        switch ($this->configuration->getMode()) {
+            case ClientConfiguration::MODE_TEST:
+                $this->uriAuth = self::URI_DEMO_AUTH;
+                $this->uriApi = self::URI_DEMO_API;
+                $this->uriDelivery = self::URI_DEMO_DELIVERY;
+                break;
+            case ClientConfiguration::MODE_PROD:
+                $this->uriAuth = self::URI_PROD_AUTH;
+                $this->uriApi = self::URI_PROD_API;
+                $this->uriDelivery = self::URI_PROD_DELIVERY;
+                break;
+        }
     }
 
     /**
-     * @param mixed $username
+     * @return ClientConfiguration
      */
-    public function setUsername($username)
+    public function getConfiguration(): ClientConfiguration
     {
-        $this->username = $username;
-    }
-
-    /**
-     * @param mixed $password
-     */
-    public function setPassword($password)
-    {
-        $this->password = $password;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getUsername()
-    {
-        return $this->username;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getPassword()
-    {
-        return $this->password;
+        return $this->configuration;
     }
 
     public function setTokenStorage(ITokenStorage $tokenStorage)
@@ -118,61 +89,37 @@ class Client
     }
 
     /**
-     * @param string $uriApi
-     */
-    public function setUriApi($uriApi)
-    {
-        $this->uriApi = $uriApi;
-    }
-
-    /**
-     * @param string $uriAuth
-     */
-    public function setUriAuth($uriAuth)
-    {
-        $this->uriAuth = $uriAuth;
-    }
-
-    /**
-     * @param string $uriDelivery
-     */
-    public function setUriDelivery($uriDelivery)
-    {
-        $this->uriDelivery = $uriDelivery;
-    }
-
-    /**
      * Метод возвращает список городов
      * @return CitiesRequest
      */
     public function cities()
     {
-        return new CitiesRequest($this->getUriApi(), new Authenticator($this));
+        return new CitiesRequest($this->uriApi, new Authenticator($this));
     }
 
     public function outpostPoints()
     {
-        return new OutpostPointsRequest($this->getUriApi(), new Authenticator($this));
+        return new OutpostPointsRequest($this->uriApi, new Authenticator($this));
     }
 
     public function metroStations()
     {
-        return new MetroStationsRequest($this->getUriApi(), new Authenticator($this));
+        return new MetroStationsRequest($this->uriApi, new Authenticator($this));
     }
 
     public function metroLines()
     {
-        return new MetroLinesRequest($this->getUriApi(), new Authenticator($this));
+        return new MetroLinesRequest($this->uriApi, new Authenticator($this));
     }
 
     public function delivery()
     {
-        return new DeliveryRequest($this->getUriDelivery(), new Authenticator($this));
+        return new DeliveryRequest($this->uriDelivery, new Authenticator($this));
     }
 
     public function order()
     {
-        return new OrderRequest($this);
+        return new OrderRequest($this->uriDelivery, new Authenticator($this));
     }
 
 }

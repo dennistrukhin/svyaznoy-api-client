@@ -171,17 +171,17 @@ class OutpostPoint
     }
 
     /**
-     * @return mixed
+     * @return string
      */
-    public function getWorkTimeCustom()
+    public function getWorkTimeCustom(): string
     {
         return $this->workTimeCustom;
     }
 
     /**
-     * @param mixed $workTimeCustom
+     * @param string $workTimeCustom
      */
-    public function setWorkTimeCustom($workTimeCustom): void
+    public function setWorkTimeCustom(string $workTimeCustom): void
     {
         $this->workTimeCustom = $workTimeCustom;
     }

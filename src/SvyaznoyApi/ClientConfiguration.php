@@ -1,16 +1,21 @@
 <?php
 namespace SvyaznoyApi;
 
-class ClientAuthenticationData
+class ClientConfiguration
 {
+
+    const MODE_PROD = 'prod';
+    const MODE_TEST = 'demo';
 
     private $username;
     private $password;
+    private $mode = self::MODE_TEST;
 
-    public function __construct(string $username, string $password)
+    public function __construct(string $username, string $password, $mode)
     {
         $this->username = $username;
         $this->password = $password;
+        $this->mode = $mode;
     }
 
     /**
@@ -27,6 +32,14 @@ class ClientAuthenticationData
     public function getUsername(): string
     {
         return $this->username;
+    }
+
+    /**
+     * @return string
+     */
+    public function getMode(): string
+    {
+        return $this->mode;
     }
 
 }

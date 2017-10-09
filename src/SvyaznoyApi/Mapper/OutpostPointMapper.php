@@ -12,35 +12,21 @@ class OutpostPointMapper
     public function map(array $data): OutpostPoint
     {
         $outpostPoint = new OutpostPoint();
-        if (isset($data['id'])) {
-            $outpostPoint->setId(str_pad($data['id'], 8, '0', STR_PAD_LEFT));
-        }
-        if (isset($data['name'])) {
-            $outpostPoint->setName($data['name']);
-        }
-        if (isset($data['images']) && is_array($data['images'])) {
+        $outpostPoint->setId(str_pad($data['id'], 8, '0', STR_PAD_LEFT));
+        $outpostPoint->setName($data['name']);
+        if (is_array($data['images'])) {
             $outpostPoint->setImages($data['images']);
         }
-        if (isset($data['city_id'])) {
-            $outpostPoint->setCityId($data['city_id']);
-        }
-        if (isset($data['active'])) {
-            $outpostPoint->setActive($data['active']);
-        }
-        if (isset($data['address'])) {
-            $outpostPoint->setAddress($data['address']);
-        }
-        if (isset($data['station_ids']) && is_array($data['station_ids'])) {
+        $outpostPoint->setCityId($data['city_id']);
+        $outpostPoint->setActive($data['active'] ?? false);
+        $outpostPoint->setAddress($data['address'] ?? '');
+        if (is_array($data['station_ids'])) {
             $outpostPoint->setStationIds($data['station_ids']);
         }
-        if (isset($data['yandex_address'])) {
-            $outpostPoint->setYandexAddress($data['yandex_address']);
-        }
+        $outpostPoint->setYandexAddress($data['yandex_address'] ?? '');
         if (isset($data['work_time'])) {
             $wt = new OutpostWorkTime();
-            if (isset($data['work_time']['string'])) {
-                $wt->setString($data['work_time']['string']);
-            }
+            $wt->setString($data['work_time']['string'] ?? '');
             for ($i = 1; $i <= 7; $i++) {
                 if (!empty($data['work_time']['array'][$i])) {
                     $timeFrom = Time::makeFromString($data['work_time']['array'][$i]['time_from']);
@@ -50,33 +36,15 @@ class OutpostPointMapper
             }
             $outpostPoint->setWorkTime($wt);
         }
-        if (isset($data['work_time_custom'])) {
-            $outpostPoint->setWorkTimeCustom($data['work_time_custom']);
-        }
-        if (isset($data['latitude'])) {
-            $outpostPoint->setLatitude($data['latitude']);
-        }
-        if (isset($data['longitude'])) {
-            $outpostPoint->setLongitude($data['longitude']);
-        }
-        if (isset($data['email'])) {
-            $outpostPoint->setEmail($data['email']);
-        }
-        if (isset($data['directions'])) {
-            $outpostPoint->setDirections($data['directions']);
-        }
-        if (isset($data['shop_type'])) {
-            $outpostPoint->setShopType($data['shop_type']);
-        }
-        if (isset($data['has_credit'])) {
-            $outpostPoint->setCredit($data['has_credit']);
-        }
-        if (isset($data['services'])) {
-            $outpostPoint->setServices($data['services']);
-        }
-        if (isset($data['twenty_four_hour'])) {
-            $outpostPoint->setTwentyFourHour($data['twenty_four_hour']);
-        }
+        $outpostPoint->setWorkTimeCustom($data['work_time_custom'] ?? '');
+        $outpostPoint->setLatitude($data['latitude'] ?? 0);
+        $outpostPoint->setLongitude($data['longitude'] ?? 0);
+        $outpostPoint->setEmail($data['email'] ?? '');
+        $outpostPoint->setDirections($data['directions'] ?? '');
+        $outpostPoint->setShopType($data['shop_type'] ?? 0);
+        $outpostPoint->setCredit($data['has_credit'] ?? false);
+        $outpostPoint->setServices($data['services'] ?? []);
+        $outpostPoint->setTwentyFourHour($data['twenty_four_hour'] ?? false);
         return $outpostPoint;
     }
 

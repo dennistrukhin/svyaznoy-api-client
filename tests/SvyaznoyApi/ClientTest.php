@@ -3,26 +3,26 @@ namespace SvyaznoyApi\Tests;
 
 use PHPUnit\Framework\TestCase;
 use SvyaznoyApi\Client;
-use SvyaznoyApi\ClientAuthenticationData;
+use SvyaznoyApi\ClientConfiguration;
 
 class ClientTest extends TestCase
 {
 
-    public function testMakeTest()
+    public function testCreateTest()
     {
-        $client = Client::getTest(new ClientAuthenticationData('name', 'psw'));
-        $this->assertTrue($client->getUsername() === 'name');
-        $this->assertTrue($client->getPassword() === 'psw');
+        $config = new ClientConfiguration('name', 'psw', ClientConfiguration::MODE_TEST);
+        $client = new Client($config);
+        $this->assertTrue($client->getConfiguration() === $config);
         $this->assertTrue($client->getUriApi() === Client::URI_DEMO_API);
         $this->assertTrue($client->getUriAuth() === Client::URI_DEMO_AUTH);
         $this->assertTrue($client->getUriDelivery() === Client::URI_DEMO_DELIVERY);
     }
 
-    public function testMakeProd()
+    public function testCreateProd()
     {
-        $client = Client::getProd(new ClientAuthenticationData('name', 'psw'));
-        $this->assertTrue($client->getUsername() === 'name');
-        $this->assertTrue($client->getPassword() === 'psw');
+        $config = new ClientConfiguration('name', 'psw', ClientConfiguration::MODE_PROD);
+        $client = new Client($config);
+        $this->assertTrue($client->getConfiguration() === $config);
         $this->assertTrue($client->getUriApi() === Client::URI_PROD_API);
         $this->assertTrue($client->getUriAuth() === Client::URI_PROD_AUTH);
         $this->assertTrue($client->getUriDelivery() === Client::URI_PROD_DELIVERY);
