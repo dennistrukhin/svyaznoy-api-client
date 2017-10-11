@@ -2,7 +2,7 @@
 namespace SvyaznoyApi\Request;
 
 use SvyaznoyApi\Collection\CityCollection;
-use SvyaznoyApi\Client;
+use SvyaznoyApi\HTTP\Client;
 use SvyaznoyApi\Mapper\CityMapper;
 
 class Cities extends ARequest

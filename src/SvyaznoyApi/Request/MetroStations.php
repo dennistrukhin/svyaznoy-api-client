@@ -2,7 +2,7 @@
 namespace SvyaznoyApi\Request;
 
 use SvyaznoyApi\Collection\MetroStationCollection;
-use SvyaznoyApi\Client;
+use SvyaznoyApi\HTTP\Client;
 use SvyaznoyApi\Mapper\MetroStationMapper;
 
 class MetroStations extends ARequest
