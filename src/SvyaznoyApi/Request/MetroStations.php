@@ -25,7 +25,7 @@ class MetroStations extends ARequest
         $httpClient = new Client($this->authenticator);
         $response = $httpClient->get($this->baseUri . '/metro/stations', null, $query);
         $collection = new MetroStationCollection();
-        $collection->setTotalCount($response->getHeader('X-Pagination-Total-Count'));
+        $collection->setTotalCount($response->getHeaderItem('X-Pagination-Total-Count', 0));
         $mapper = new MetroStationMapper();
         foreach ($response->getBody() as $item) {
             $metroStation = $mapper->map($item);

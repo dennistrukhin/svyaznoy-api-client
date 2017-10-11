@@ -16,11 +16,11 @@ class MetroLines extends ARequest
         $httpClient = new Client($this->authenticator);
         $response = $httpClient->get($this->baseUri . '/metro/lines');
         $collection = new MetroLineCollection();
-        $collection->setTotalCount($response->getHeader('X-Pagination-Total-Count'));
+        $collection->setTotalCount($response->getHeaderItem('X-Pagination-Total-Count', 0));
         $mapper = new MetroLineMapper();
         foreach ($response->getBody() as $item) {
-            $city = $mapper->map($item);
-            $collection->push($city);
+            $metroLine = $mapper->map($item);
+            $collection->push($metroLine);
         }
         return $collection;
     }

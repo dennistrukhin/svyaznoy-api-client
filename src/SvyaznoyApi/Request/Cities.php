@@ -31,7 +31,7 @@ class Cities extends ARequest
         }
         $response = $httpClient->get($this->baseUri . '/cities', null, $query);
         $collection = new CityCollection();
-        $collection->setTotalCount($response->getHeader('X-Pagination-Total-Count'));
+        $collection->setTotalCount($response->getHeaderItem('X-Pagination-Total-Count', 0));
         $mapper = new CityMapper();
         foreach ($response->getBody() as $item) {
             $city = $mapper->map($item);

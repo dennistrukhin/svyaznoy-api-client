@@ -32,8 +32,8 @@ class Delivery extends ARequest
         $collection = new DeliveryCollection();
         $mapper = new DeliveryMapper();
         foreach ($response->getBody()['items'] as $item) {
-            $city = $mapper->map($item);
-            $collection->push($city);
+            $deliveryItem = $mapper->map($item);
+            $collection->push($deliveryItem);
         }
         return $collection;
     }
