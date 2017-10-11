@@ -23,7 +23,7 @@ class MetroStations extends ARequest
             'per_page' => $pagination->getPageSize(),
         ];
         $httpClient = new Client($this->authenticator);
-        $response = $httpClient->get($this->baseUri . '/metro/stations', [], $query);
+        $response = $httpClient->get($this->baseUri . '/metro/stations', null, $query);
         $collection = new MetroStationCollection();
         $collection->setTotalCount($response->getHeader('X-Pagination-Total-Count'));
         $mapper = new MetroStationMapper();

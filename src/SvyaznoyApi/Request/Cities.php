@@ -29,7 +29,7 @@ class Cities extends ARequest
         if ($filter instanceof CitiesFilter && !empty($filter->getQuery())) {
             $query['query'] = $filter->getQuery();
         }
-        $response = $httpClient->get($this->baseUri . '/cities', [], $query);
+        $response = $httpClient->get($this->baseUri . '/cities', null, $query);
         $collection = new CityCollection();
         $collection->setTotalCount($response->getHeader('X-Pagination-Total-Count'));
         $mapper = new CityMapper();
