@@ -5,6 +5,7 @@ use SvyaznoyApi\Authenticator;
 use SvyaznoyApi\Exception\Unauthorized;
 use SvyaznoyApi\Exception\Unreachable;
 use SvyaznoyApi\Exception\Unrecoverable;
+use SvyaznoyApi\Library\OrderResponse;
 
 class Client
 {

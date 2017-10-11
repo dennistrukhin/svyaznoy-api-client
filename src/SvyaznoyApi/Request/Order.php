@@ -4,6 +4,7 @@ namespace SvyaznoyApi\Request;
 use SvyaznoyApi\Exception\UnprocessableEntity;
 use SvyaznoyApi\HTTP\Client;
 use SvyaznoyApi\Library\DeliveryDate;
+use SvyaznoyApi\Library\OrderResponse;
 use SvyaznoyApi\Library\TimeInterval;
 
 class Order extends ARequest
@@ -26,7 +27,12 @@ class Order extends ARequest
             $e = new UnprocessableEntity($response->getStatusText(), $messages);
             throw $e;
         }
-        return $response;
+        return new OrderResponse(
+            $response->getBody()['id'],
+            $response->getBody()['partner_order_number'],
+            $response->getBody()['inserted_at'],
+            $response->getBody()['updated_at']
+        );
     }
 
     /**
@@ -68,7 +74,7 @@ class Order extends ARequest
             $query['email'] = $order->getEmail();
         }
         if (!empty($order->getOutpostPointId())) {
-            $query['cms_addressee'] = $order->getOutpostPointId();
+            $query['cms_addressee'] = (int)$order->getOutpostPointId();
         }
         if ($order->getCalculationDateTime() instanceof \DateTime) {
             $query['calculation_datetime'] = $order->getCalculationDateTime()->getTimestamp();
@@ -86,7 +92,7 @@ class Order extends ARequest
             foreach ($cartItems as $cartItem) {
                 $cartArray[] = [
                     'product_id' => $cartItem->getProductId(),
-                    'price' => $cartItem->getPrice(),
+                    'price' => $cartItem->getPrice() / 100,
                     'qty' => $cartItem->getQuantity(),
                 ];
             }
