@@ -32,4 +32,14 @@ class Pagination
         return $this->pageSize;
     }
 
+    public function inc()
+    {
+        $this->pageNumber++;
+    }
+
+    public function dec()
+    {
+        $this->pageNumber--;
+    }
+
 }
