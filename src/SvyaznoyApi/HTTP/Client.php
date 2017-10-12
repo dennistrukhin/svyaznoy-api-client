@@ -5,7 +5,6 @@ use SvyaznoyApi\Authenticator;
 use SvyaznoyApi\Exception\Unauthorized;
 use SvyaznoyApi\Exception\Unreachable;
 use SvyaznoyApi\Exception\Unrecoverable;
-use SvyaznoyApi\Library\OrderResponse;
 
 class Client
 {
@@ -18,33 +17,53 @@ class Client
 
     private $maxAttempts = 3;
 
+    /**
+     * Client constructor.
+     * @param Authenticator $authenticator
+     */
     public function __construct(Authenticator $authenticator)
     {
         $this->authenticator = $authenticator;
     }
 
-    public function get($uri, ?Headers $headers = null, $params = [])
+    /**
+     * @param $uri
+     * @param null|Headers $headers
+     * @param array $params
+     * @return Response
+     */
+    public function get($uri, ?Headers $headers = null, $params = []): Response
     {
         return $this->send(self::METHOD_GET, $uri, $headers, $params);
     }
 
-    public function post($uri, ?Headers $headers = null, $params = [])
+    /**
+     * @param $uri
+     * @param null|Headers $headers
+     * @param array $params
+     * @return Response
+     */
+    public function post($uri, ?Headers $headers = null, $params = []): Response
     {
         return $this->send(self::METHOD_POST, $uri, $headers, $params);
     }
 
-    private function send($method, $uri, ?Headers $headers = null, array $params = [])
+    /**
+     * @param $method
+     * @param $uri
+     * @param null|Headers $headers
+     * @param array $params
+     * @return Response
+     * @throws Unauthorized
+     * @throws Unreachable
+     * @throws Unrecoverable
+     */
+    private function send($method, $uri, ?Headers $headers = null, array $params = []): Response
     {
-        if (is_null($headers)) {
-            $headers = new Headers();
-        }
-        $ch = new Curl($method, $uri);
-        $ch->setParams($params);
         for ($attempt = 0; $attempt < $this->maxAttempts; $attempt++) {
-            $token = $this->authenticator->getToken();
-            $headers->add(new Header('Authorization', 'Bearer ' . $token));
-            $ch->setHeaders($headers);
-            $response = $ch->execute();
+            $request = new Request($method, $uri, $headers, $params);
+            $this->authenticator->addAuthData($request);
+            $response = (new Curl())->execute($request);
             if ($response->getStatusCode() == 401) {
                 $this->authenticator->refreshToken();
                 continue;
