@@ -4,12 +4,12 @@ namespace SvyaznoyApi;
 class TokenStorageMemory implements ITokenStorage
 {
 
-    private $token = null;
+    private $token = false;
     private $expire = 0;
 
     public function exists()
     {
-        if (is_null($this->token)) {
+        if ($this->token === false) {
             return false;
         }
         if ($this->expired()) {
@@ -21,7 +21,7 @@ class TokenStorageMemory implements ITokenStorage
     public function get()
     {
         if ($this->expired()) {
-            return null;
+            return false;
         }
         return $this->token;
     }

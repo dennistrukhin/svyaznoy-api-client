@@ -5,7 +5,7 @@ use PHPUnit\Framework\TestCase;
 use SvyaznoyApi\Mock\Redis;
 use SvyaznoyApi\TokenStorageRedis;
 
-class TokenStorageTest extends TestCase
+class TokenStorageRedisTest extends TestCase
 {
 
     const TOKEN_STRING = 'qweasdzxc';
