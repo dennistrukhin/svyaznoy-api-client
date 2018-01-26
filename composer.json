@@ -1,12 +1,18 @@
 {
   "name": "dvt/svyaznoy-api-client",
-  "author": "Dennis Trukhin (Dvt)",
-  "version": "0.1.0",
+  "authors": [
+    {
+      "name": "Dennis Trukhin (Dvt)",
+      "email": "dennis.trukhin@gmail.com",
+      "role": "developer"
+    }
+  ],
+  "description": "Svyaznoy API client written in PHP",
   "license": "GPL-3.0",
   "require": {
-    "php-di/php-di": "*",
+    "php-di/php-di": "^5.4",
     "guzzlehttp/guzzle": "^6.3",
-    "psr/log": "*"
+    "psr/log": "^1.0"
   },
   "require-dev": {
     "phpunit/phpunit": "*",
