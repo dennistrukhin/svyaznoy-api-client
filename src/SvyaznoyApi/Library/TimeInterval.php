@@ -1,7 +1,7 @@
 <?php
 namespace SvyaznoyApi\Library;
 
-class TimeInterval
+class TimeInterval implements \JsonSerializable
 {
 
     private $timeFrom;
@@ -36,6 +36,11 @@ class TimeInterval
         $timeTo = Time::makeFromString($parts[1] ?? '');
         $interval = new self($timeFrom, $timeTo);
         return $interval;
+    }
+
+    public function jsonSerialize()
+    {
+        return get_object_vars($this);
     }
 
 }

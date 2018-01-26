@@ -1,23 +1,31 @@
 <?php
 namespace SvyaznoyApi\Request;
 
+use Psr\Log\LoggerInterface;
+use SvyaznoyApi\Entity\Order;
 use SvyaznoyApi\Exception\UnprocessableEntity;
-use SvyaznoyApi\HTTP\Client;
 use SvyaznoyApi\Library\DeliveryDate;
 use SvyaznoyApi\Library\OrderResponse;
 use SvyaznoyApi\Library\TimeInterval;
 
-class Order extends ARequest
+class Orders extends ARequest
 {
 
-    public function create(\SvyaznoyApi\Entity\Order $order)
+    /**
+     * @param Order $order
+     * @return OrderResponse
+     * @throws UnprocessableEntity
+     */
+    public function create(Order $order)
     {
-        $httpClient = new Client($this->authenticator);
-
-        $response = $httpClient->post(
+        if ($this->logger instanceof LoggerInterface) {
+            $this->logger->info('Отправка в Связной заказа', $order);
+        }
+        $params = $this->getQueryArray($order);
+        $response = $this->httpClient->post(
             $this->baseUri . '/orders',
             null,
-            $this->getQueryArray($order)
+            $params
         );
         if ($response->getStatusCode() === 422) {
             $messages = [];
@@ -36,10 +44,10 @@ class Order extends ARequest
     }
 
     /**
-     * @param \SvyaznoyApi\Entity\Order $order
+     * @param Order $order
      * @return array
      */
-    private function getQueryArray(\SvyaznoyApi\Entity\Order $order): array
+    private function getQueryArray(Order $order): array
     {
         $query = [];
         if (!empty($order->getPartnerOrderNumber())) {
@@ -57,10 +65,6 @@ class Order extends ARequest
         if ($order->getDeliveryDate() instanceof DeliveryDate) {
             $query['delivery_date'] = $order->getDeliveryDate()->format('Y-m-d');
         }
-        if ($order->getDeliveryInterval() instanceof TimeInterval) {
-            $query['delivery_time_from'] = $order->getDeliveryInterval()->getTimeFrom()->format('H:i');
-            $query['delivery_time_to'] = $order->getDeliveryInterval()->getTimeTo()->format('H:i');
-        }
         if (!empty($order->getContactName())) {
             $query['contact_name'] = $order->getContactName();
         }
@@ -77,7 +81,7 @@ class Order extends ARequest
             $query['cms_addressee'] = (int)$order->getOutpostPointId();
         }
         if ($order->getCalculationDateTime() instanceof \DateTime) {
-            $query['calculation_datetime'] = $order->getCalculationDateTime()->getTimestamp();
+            $query['calculation_datetime'] = $order->getCalculationDateTime()->format('Y-m-d\TH:i:s');
         }
         if (!empty($order->getCompanyName())) {
             $query['f_company_name'] = $order->getCompanyName();
@@ -86,6 +90,21 @@ class Order extends ARequest
             $query['bn_inn'] = $order->getCompanyInn();
         }
         $query['format'] = 'json';
+        $this->addTimeInterval($query, $order);
+        $this->addCartItems($query, $order);
+        return $query;
+    }
+
+    private function addTimeInterval(array &$query, Order $order)
+    {
+        if ($order->getDeliveryInterval() instanceof TimeInterval) {
+            $query['delivery_time_from'] = $order->getDeliveryInterval()->getTimeFrom()->format('H:i');
+            $query['delivery_time_to'] = $order->getDeliveryInterval()->getTimeTo()->format('H:i');
+        }
+    }
+
+    private function addCartItems(array &$query, Order $order)
+    {
         $cartItems = $order->getCart()->getItems();
         if (count($cartItems) > 0) {
             $cartArray = [];
@@ -98,8 +117,6 @@ class Order extends ARequest
             }
             $query['basket'] = $cartArray;
         }
-        return $query;
     }
-
 
 }

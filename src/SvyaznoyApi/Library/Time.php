@@ -1,7 +1,7 @@
 <?php
 namespace SvyaznoyApi\Library;
 
-class Time
+class Time implements \JsonSerializable
 {
 
     private $hour = 0;
@@ -59,6 +59,11 @@ class Time
 
         $string = preg_replace('#\\\\#', '', $string);
         return $string;
+    }
+
+    public function jsonSerialize()
+    {
+        return get_object_vars($this);
     }
 
 }

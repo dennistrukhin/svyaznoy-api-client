@@ -1,7 +1,7 @@
 <?php
 namespace SvyaznoyApi\Library;
 
-class Cart
+class Cart implements \JsonSerializable
 {
 
     /** @var CartItem[] */
@@ -21,6 +21,11 @@ class Cart
     public function getItems(): array
     {
         return $this->items;
+    }
+
+    public function jsonSerialize()
+    {
+        return get_object_vars($this);
     }
 
 }

@@ -1,7 +1,7 @@
 <?php
-namespace SvyaznoyApi;
+namespace SvyaznoyApi\TokenStorage;
 
-interface ITokenStorage
+interface TokenStorageInterface
 {
 
     public function exists();

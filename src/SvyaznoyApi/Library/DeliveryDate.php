@@ -1,7 +1,7 @@
 <?php
 namespace SvyaznoyApi\Library;
 
-class DeliveryDate
+class DeliveryDate implements \JsonSerializable
 {
 
     private $year = 0;
@@ -47,6 +47,11 @@ class DeliveryDate
 
         $string = preg_replace('#\\\\#', '', $string);
         return $string;
+    }
+
+    public function jsonSerialize()
+    {
+        return get_object_vars($this);
     }
 
 }

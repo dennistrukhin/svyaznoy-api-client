@@ -2,7 +2,7 @@
 namespace SvyaznoyApi\Tests\HTTP;
 
 use PHPUnit\Framework\TestCase;
-use SvyaznoyApi\HTTP\Header;
+use SvyaznoyApi\Http\Header;
 
 class HeaderTest extends TestCase
 {

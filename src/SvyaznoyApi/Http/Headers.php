@@ -1,5 +1,5 @@
 <?php
-namespace SvyaznoyApi\HTTP;
+namespace SvyaznoyApi\Http;
 
 class Headers
 {
@@ -59,8 +59,7 @@ class Headers
         $result = [];
         foreach ($this->getAll() as $header) {
             foreach ($header->getValues() as $value) {
-                $headerString = $header->getName() . ': ' . $value;
-                $result[] = $headerString;
+                $result[$header->getName()] = $value;
             }
         }
         return $result;

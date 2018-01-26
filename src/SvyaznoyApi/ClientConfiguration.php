@@ -1,6 +1,9 @@
 <?php
 namespace SvyaznoyApi;
 
+use Psr\Log\LoggerInterface;
+use SvyaznoyApi\TokenStorage\TokenStorageInterface;
+
 class ClientConfiguration
 {
 
@@ -10,12 +13,23 @@ class ClientConfiguration
     private $username;
     private $password;
     private $mode = self::MODE_TEST;
+    /** @var TokenStorageInterface $tokenStorage */
+    private $tokenStorage;
+    /** @var LoggerInterface $logger */
+    private $logger;
 
-    public function __construct(string $username, string $password, $mode)
+    public function __construct(
+        string $username,
+        string $password,
+        string $mode,
+        ?TokenStorageInterface $tokenStorage = null,
+        ?LoggerInterface $logger = null)
     {
         $this->username = $username;
         $this->password = $password;
         $this->mode = $mode;
+        $this->tokenStorage = $tokenStorage;
+        $this->logger = $logger;
     }
 
     /**
@@ -40,6 +54,22 @@ class ClientConfiguration
     public function getMode(): string
     {
         return $this->mode;
+    }
+
+    /**
+     * @return null|TokenStorageInterface
+     */
+    public function getTokenStorage(): ?TokenStorageInterface
+    {
+        return $this->tokenStorage;
+    }
+
+    /**
+     * @return null|LoggerInterface
+     */
+    public function getLogger(): ?LoggerInterface
+    {
+        return $this->logger;
     }
 
 }

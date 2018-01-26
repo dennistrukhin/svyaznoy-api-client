@@ -1,7 +1,7 @@
 <?php
 namespace SvyaznoyApi\Library;
 
-class CartItem
+class CartItem implements \JsonSerializable
 {
 
     const DEFAULT_PRODUCT_ID = '2796047';
@@ -39,6 +39,11 @@ class CartItem
     public function getQuantity(): int
     {
         return $this->quantity;
+    }
+
+    public function jsonSerialize()
+    {
+        return get_object_vars($this);
     }
 
 }

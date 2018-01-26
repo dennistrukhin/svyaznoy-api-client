@@ -1,5 +1,13 @@
 {
-  "name": "dennistrukhin/svyaznoy-api-client",
+  "name": "dvt/svyaznoy-api-client",
+  "author": "Dennis Trukhin (Dvt)",
+  "version": "0.1.0",
+  "license": "GPL-3.0",
+  "require": {
+    "php-di/php-di": "*",
+    "guzzlehttp/guzzle": "^6.3",
+    "psr/log": "*"
+  },
   "require-dev": {
     "phpunit/phpunit": "*",
     "phpmetrics/phpmetrics": "*"

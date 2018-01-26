@@ -2,8 +2,8 @@
 namespace SvyaznoyApi\Tests\HTTP;
 
 use PHPUnit\Framework\TestCase;
-use SvyaznoyApi\HTTP\Header;
-use SvyaznoyApi\HTTP\Headers;
+use SvyaznoyApi\Http\Header;
+use SvyaznoyApi\Http\Headers;
 
 class HeadersTest extends TestCase
 {
@@ -43,15 +43,13 @@ class HeadersTest extends TestCase
     {
         $headers = new Headers();
         $header = new Header('name1', 'value1_1');
-        $header->addValue('value1_2');
         $headers->add($header);
         $header2 = new Header('name2', 'value2_1');
         $headers->add($header2);
         $array = $headers->getHttpArray();
-        $this->assertTrue(count($array) === 3);
-        $this->assertTrue(in_array('name1: value1_1', $array));
-        $this->assertTrue(in_array('name1: value1_2', $array));
-        $this->assertTrue(in_array('name2: value2_1', $array));
+        $this->assertTrue(count($array) === 2);
+        $this->assertTrue($array['name1'] === 'value1_1');
+        $this->assertTrue($array['name2'] === 'value2_1');
     }
 
 }

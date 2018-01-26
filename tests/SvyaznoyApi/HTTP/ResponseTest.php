@@ -2,7 +2,7 @@
 namespace SvyaznoyApi\Tests\HTTP;
 
 use PHPUnit\Framework\TestCase;
-use SvyaznoyApi\HTTP\Response;
+use SvyaznoyApi\Http\Response;
 
 class ResponseTest extends TestCase
 {
@@ -13,7 +13,7 @@ HERE;
 
     public function testConstructor()
     {
-        $response = new Response(self::RESPONSE_TEXT);
+        $response = Response::makeFromHttp(self::RESPONSE_TEXT);
         $this->assertTrue(
             $response->getStatusCode() == 200,
             'Expected status code = 200 and got ' . $response->getStatusCode()

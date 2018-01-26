@@ -2,7 +2,6 @@
 namespace SvyaznoyApi\Request;
 
 use SvyaznoyApi\Collection\MetroStationCollection;
-use SvyaznoyApi\HTTP\Client;
 use SvyaznoyApi\Mapper\MetroStationMapper;
 
 class MetroStations extends ARequest
@@ -22,8 +21,7 @@ class MetroStations extends ARequest
             'page' => $pagination->getPageNumber(),
             'per_page' => $pagination->getPageSize(),
         ];
-        $httpClient = new Client($this->authenticator);
-        $response = $httpClient->get($this->baseUri . '/metro/stations', null, $query);
+        $response = $this->httpClient->get($this->baseUri . '/metro/stations', null, $query);
         $collection = new MetroStationCollection();
         $collection->setTotalCount($response->getHeaderItem('X-Pagination-Total-Count', 0));
         $mapper = new MetroStationMapper();
@@ -48,8 +46,7 @@ class MetroStations extends ARequest
             'page' => $pagination->getPageNumber(),
             'per_page' => $pagination->getPageSize(),
         ];
-        $httpClient = new Client($this->authenticator);
-        $response = $httpClient->get(
+        $response = $this->httpClient->get(
             $this->baseUri . '/metro/lines/' . $lineId . '/stations', [], $query
         );
         $collection = new MetroStationCollection();
@@ -68,8 +65,7 @@ class MetroStations extends ARequest
      */
     public function getById(int $stationId)
     {
-        $httpClient = new Client($this->authenticator);
-        $response = $httpClient->get(
+        $response = $this->httpClient->get(
             $this->baseUri . '/metro/stations/' . $stationId
         );
         $mapper = new MetroStationMapper();

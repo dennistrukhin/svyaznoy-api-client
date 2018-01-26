@@ -1,7 +1,7 @@
 <?php
-namespace SvyaznoyApi;
+namespace SvyaznoyApi\TokenStorage;
 
-class TokenStorageRedis implements ITokenStorage
+class TokenStorageRedis implements TokenStorageInterface
 {
 
     const REDIS_TOKEN_KEY = 'svyaznoy_client_access_token';

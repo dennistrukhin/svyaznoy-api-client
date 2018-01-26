@@ -1,5 +1,5 @@
 <?php
-namespace SvyaznoyApi\HTTP;
+namespace SvyaznoyApi\Http;
 
 class Header
 {

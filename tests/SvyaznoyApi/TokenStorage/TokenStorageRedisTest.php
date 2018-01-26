@@ -1,9 +1,9 @@
 <?php
-namespace SvyaznoyApi\Tests;
+namespace SvyaznoyApi\Tests\TokenStorage;
 
 use PHPUnit\Framework\TestCase;
 use SvyaznoyApi\Mock\Redis;
-use SvyaznoyApi\TokenStorageRedis;
+use SvyaznoyApi\TokenStorage\TokenStorageRedis;
 
 class TokenStorageRedisTest extends TestCase
 {

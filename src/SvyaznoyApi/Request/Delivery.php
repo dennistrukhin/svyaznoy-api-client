@@ -2,7 +2,7 @@
 namespace SvyaznoyApi\Request;
 
 use SvyaznoyApi\Collection\DeliveryCollection;
-use SvyaznoyApi\HTTP\Client;
+use SvyaznoyApi\Http\Client;
 use SvyaznoyApi\Mapper\DeliveryMapper;
 
 class Delivery extends ARequest

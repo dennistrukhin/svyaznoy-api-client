@@ -1,7 +1,7 @@
 <?php
-namespace SvyaznoyApi;
+namespace SvyaznoyApi\TokenStorage;
 
-class TokenStorageMemory implements ITokenStorage
+class TokenStorageMemory implements TokenStorageInterface
 {
 
     private $token = false;

@@ -9,5 +9,8 @@
         <whitelist>
             <directory>./../src/SvyaznoyApi</directory>
         </whitelist>
+        <blacklist>
+            <directory>./../tests/SvyaznoyApi</directory>
+        </blacklist>
     </filter>
 </phpunit>

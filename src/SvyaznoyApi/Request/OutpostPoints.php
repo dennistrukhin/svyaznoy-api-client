@@ -2,7 +2,6 @@
 namespace SvyaznoyApi\Request;
 
 use SvyaznoyApi\Collection\OutpostPointCollection;
-use SvyaznoyApi\HTTP\Client as HttpClient;
 use SvyaznoyApi\Mapper\OutpostPointMapper;
 
 class OutpostPoints extends ARequest
@@ -18,7 +17,6 @@ class OutpostPoints extends ARequest
         if (is_null($pagination)) {
             $pagination = new Pagination();
         }
-        $httpClient = new HttpClient($this->authenticator);
         $query = [
             'page' => $pagination->getPageNumber(),
             'per_page' => $pagination->getPageSize(),
@@ -29,7 +27,7 @@ class OutpostPoints extends ARequest
         if ($filter instanceof OutpostPointsFilter && count($filter->getIds())) {
             $query['ids'] = implode(',', $filter->getIds());
         }
-        $response = $httpClient->get($this->baseUri . '/shops', null, $query);
+        $response = $this->httpClient->get($this->baseUri . '/shops', null, $query);
         $collection = new OutpostPointCollection();
         $collection->setTotalCount($response->getHeaderItem('X-Pagination-Total-Count', 0));
         $mapper = new OutpostPointMapper();

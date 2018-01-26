@@ -1,10 +1,8 @@
 <?php
-namespace SvyaznoyApi\Tests;
+namespace SvyaznoyApi\Tests\TokenStorage;
 
 use PHPUnit\Framework\TestCase;
-use SvyaznoyApi\Mock\Redis;
-use SvyaznoyApi\TokenStorageMemory;
-use SvyaznoyApi\TokenStorageRedis;
+use SvyaznoyApi\TokenStorage\TokenStorageMemory;
 
 class TokenStorageMemoryTest extends TestCase
 {
@@ -14,6 +12,7 @@ class TokenStorageMemoryTest extends TestCase
     public function testExists()
     {
         $tokenStorage = new TokenStorageMemory();
+        $this->assertTrue($tokenStorage->exists() === false);
         $this->assertTrue($tokenStorage->get() === false);
         $tokenStorage->save(self::TOKEN_STRING);
         $this->assertTrue($tokenStorage->exists() === true);

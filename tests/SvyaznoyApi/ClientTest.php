@@ -4,28 +4,75 @@ namespace SvyaznoyApi\Tests;
 use PHPUnit\Framework\TestCase;
 use SvyaznoyApi\Client;
 use SvyaznoyApi\ClientConfiguration;
+use SvyaznoyApi\Request\Cities;
+use SvyaznoyApi\Request\Delivery;
+use SvyaznoyApi\Request\MetroLines;
+use SvyaznoyApi\Request\MetroStations;
+use SvyaznoyApi\Request\Orders;
+use SvyaznoyApi\Request\OutpostPoints;
 
 class ClientTest extends TestCase
 {
 
-    public function testCreateTest()
+    /**
+     * @throws \DI\DependencyException
+     * @throws \DI\NotFoundException
+     */
+    public function testCitiesMethod()
     {
-        $config = new ClientConfiguration('name', 'psw', ClientConfiguration::MODE_TEST);
-        $client = new Client($config);
-        $this->assertTrue($client->getConfiguration() === $config);
-        $this->assertTrue($client->getUriApi() === Client::URI_DEMO_API);
-        $this->assertTrue($client->getUriAuth() === Client::URI_DEMO_AUTH);
-        $this->assertTrue($client->getUriDelivery() === Client::URI_DEMO_DELIVERY);
+        $this->assertTrue($this->getDefaultClient()->cities() instanceof Cities);
     }
 
-    public function testCreateProd()
+    /**
+     * @throws \DI\DependencyException
+     * @throws \DI\NotFoundException
+     */
+    public function testOutpostPointsMethod()
+    {
+        $this->assertTrue($this->getDefaultClient()->outpostPoints() instanceof OutpostPoints);
+    }
+
+    /**
+     * @throws \DI\DependencyException
+     * @throws \DI\NotFoundException
+     */
+    public function testMetroStationsMethod()
+    {
+        $this->assertTrue($this->getDefaultClient()->metroStations() instanceof MetroStations);
+    }
+
+    /**
+     * @throws \DI\DependencyException
+     * @throws \DI\NotFoundException
+     */
+    public function testMetroLinesMethod()
+    {
+        $this->assertTrue($this->getDefaultClient()->metroLines() instanceof MetroLines);
+    }
+
+    /**
+     * @throws \DI\DependencyException
+     * @throws \DI\NotFoundException
+     */
+    public function testDeliveryMethod()
+    {
+        $this->assertTrue($this->getDefaultClient()->delivery() instanceof Delivery);
+    }
+
+    /**
+     * @throws \DI\DependencyException
+     * @throws \DI\NotFoundException
+     */
+    public function testOrderMethod()
+    {
+        $this->assertTrue($this->getDefaultClient()->orders() instanceof Orders);
+    }
+
+    private function getDefaultClient()
     {
         $config = new ClientConfiguration('name', 'psw', ClientConfiguration::MODE_PROD);
         $client = new Client($config);
-        $this->assertTrue($client->getConfiguration() === $config);
-        $this->assertTrue($client->getUriApi() === Client::URI_PROD_API);
-        $this->assertTrue($client->getUriAuth() === Client::URI_PROD_AUTH);
-        $this->assertTrue($client->getUriDelivery() === Client::URI_PROD_DELIVERY);
+        return $client;
     }
 
 }
