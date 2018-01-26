@@ -8,7 +8,7 @@
     }
   ],
   "description": "Svyaznoy API client written in PHP",
-  "license": "GPL-3.0",
+  "license": "GPL-3.0-or-later",
   "require": {
     "php-di/php-di": "^5.4",
     "guzzlehttp/guzzle": "^6.3",
