@@ -2,7 +2,6 @@
 namespace SvyaznoyApi\Request;
 
 use SvyaznoyApi\Collection\DeliveryCollection;
-use SvyaznoyApi\Http\Client;
 use SvyaznoyApi\Mapper\DeliveryMapper;
 
 class Delivery extends ARequest
@@ -10,7 +9,6 @@ class Delivery extends ARequest
 
     public function get(DeliveryFilter $filter)
     {
-        $httpClient = new Client($this->authenticator);
         $query = [
             'delivery_type_ids' => 9,
             'city_id' => $filter->getCityId(),
@@ -28,7 +26,7 @@ class Delivery extends ARequest
         if (!is_null($filter->getOrderDate())) {
             $query['order_date'] = $filter->getOrderDate()->getTimestamp();
         }
-        $response = $httpClient->get($this->baseUri . '/variations_orders', null, $query);
+        $response = $this->httpClient->get($this->baseUri . '/variations_orders', null, $query);
         $collection = new DeliveryCollection();
         $mapper = new DeliveryMapper();
         foreach ($response->getBody()['items'] as $item) {
