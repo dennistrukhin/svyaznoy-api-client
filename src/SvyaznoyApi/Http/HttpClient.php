@@ -15,6 +15,7 @@ class HttpClient implements HttpClientInterface
 
     const METHOD_GET = 'GET';
     const METHOD_POST = 'POST';
+    const DEFAULT_TIMEOUT = 30;
 
     /** @var Authenticator $authenticator */
     private $authenticator;
@@ -24,18 +25,26 @@ class HttpClient implements HttpClientInterface
     private $client;
 
     private $maxAttempts = 3;
+    private $timeOut = self::DEFAULT_TIMEOUT;
 
     /**
      * Client constructor.
      * @param AuthenticatorInterface $authenticator
      * @param Client $client
      * @param null|LoggerInterface $logger
+     * @param int $timeOut
      */
-    public function __construct(AuthenticatorInterface $authenticator, Client $client, ?LoggerInterface $logger)
+    public function __construct(
+        AuthenticatorInterface $authenticator,
+        Client $client,
+        ?LoggerInterface $logger,
+        int $timeOut = self::DEFAULT_TIMEOUT
+    )
     {
         $this->authenticator = $authenticator;
         $this->logger = $logger;
         $this->client = $client;
+        $this->timeOut = $timeOut;
     }
 
     /**
@@ -127,7 +136,7 @@ class HttpClient implements HttpClientInterface
         $requestOptions = [
             RequestOptions::QUERY => [],
             RequestOptions::HTTP_ERRORS => false,
-            RequestOptions::TIMEOUT => 10,
+            RequestOptions::TIMEOUT => 30,
         ];
         if (!empty($body)) {
             $requestOptions[RequestOptions::BODY] = $body;
