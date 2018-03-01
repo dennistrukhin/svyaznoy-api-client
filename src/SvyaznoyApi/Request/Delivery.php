@@ -21,7 +21,7 @@ class Delivery extends ARequest
             ],
         ];
         if (count($filter->getOutpostPointIds()) > 0) {
-            $query['shop_ids'] = $filter->getOutpostPointIds();
+            $query['shop_ids'] = implode(',', $filter->getOutpostPointIds());
         }
         if (!is_null($filter->getOrderDate())) {
             $query['order_date'] = $filter->getOrderDate()->getTimestamp();
