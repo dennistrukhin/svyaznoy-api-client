@@ -19,7 +19,8 @@ class Orders extends ARequest
     public function create(Order $order)
     {
         if ($this->logger instanceof LoggerInterface) {
-            $this->logger->info('Отправка в Связной заказа', $order);
+            $this->logger->info('Отправка в Связной заказа');
+            $this->logger->info(print_r($order, true));
         }
         $params = $this->getQueryArray($order);
         $response = $this->httpClient->post(
