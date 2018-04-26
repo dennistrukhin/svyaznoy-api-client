@@ -15,6 +15,9 @@ class FileLogger implements \Psr\Log\LoggerInterface
 
     public function logEvent(string $level, string $message)
     {
+        if (!is_resource($this->fh)) {
+            $this->fh = fopen($this->pathToFile, 'a');
+        }
         fprintf($this->fh, "%s %s %s\n",
             date(DATE_ISO8601),
             $level,
